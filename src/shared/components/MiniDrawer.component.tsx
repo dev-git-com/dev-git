@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, ChevronLeft, ChevronDown, ChevronUp } from "lucide-react";
+import { Menu, ChevronLeft, ChevronDown } from "lucide-react";
 import {
   IPagesConstants,
   pagesConstants,
@@ -67,11 +67,14 @@ export const MiniDrawer = ({
                   ref={(el: HTMLButtonElement | null) => {
                     buttonRefs.current[index] = el;
                   }}
-                  className={`w-full flex items-center px-4 py-2 rounded-lg ${
-                    isActive
-                      ? "bg-slate-700 text-white"
-                      : "hover:bg-white hover:text-slate-900"
-                  } gap-3`}
+                  className={`w-full flex items-center px-4 py-2 rounded-lg
+                    ${
+                      page.route === "/"
+                        ? "bg-blue-900 text-white"
+                        : isActive
+                        ? "bg-slate-700 text-white"
+                        : "hover:bg-white hover:text-slate-900"
+                    } gap-3`}
                   onMouseEnter={() => handleMouseEnter(index)}
                   onMouseLeave={handleMouseLeave}
                   onClick={() => page.subMenu && toggleSubMenu(index)}
@@ -120,6 +123,7 @@ export const MiniDrawer = ({
                 <p
                   className="fixed bg-slate-700 text-white text-sm px-3 py-2 rounded-lg"
                   style={{
+                    zIndex: 1000,
                     top:
                       (buttonRefs.current[index]?.getBoundingClientRect().top ??
                         0) + 3,
@@ -130,7 +134,7 @@ export const MiniDrawer = ({
                       15, // margin
                   }}
                 >
-                  {page.route}
+                  {page.label}
                 </p>
               )}
             </div>

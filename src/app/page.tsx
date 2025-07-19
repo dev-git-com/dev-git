@@ -1,12 +1,9 @@
-import { Metadata } from "next";
-import { redirect } from "next/navigation";
-
-export const metadata: Metadata = {
-  title: "DEV-GIT",
-  description: "Generate your app!",
+const Home = () => {
+  return (
+    <div className="container px-4 py-8">
+      
+    </div>
+  );
 };
 
-//! change it to Landing Page
-export default function LandingPage() {
-  redirect("home");
-}
+export default Home;

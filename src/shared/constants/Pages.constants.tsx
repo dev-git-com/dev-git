@@ -12,6 +12,7 @@ import {
   MessageCircle,
   Rocket,
   Rss,
+  SquareChartGantt,
 } from "lucide-react";
 
 export interface IPagesConstants {
@@ -22,9 +23,9 @@ export interface IPagesConstants {
 }
 
 export const pagesConstants: IPagesConstants[] = [
-  { route: "/home", icon: <Home />, label: "Home" },
-  { route: "/docs", icon: <FileCode />, label: "Docs" },
-  { route: "/blogs", icon: <Rss />, label: "Blogs" },
+  { route: "/", icon: <Home />, label: "Home" },
+  { route: "/docs", icon: <SquareChartGantt />, label: "Docs" },
+  { route: "/blog", icon: <Rss />, label: "Blog" },
   { route: "/develop", icon: <FolderCode />, label: "Develop" },
   { route: "/templates", icon: <LayoutPanelTop />, label: "Templates" },
   { route: "/pricing", icon: <BadgePercent />, label: "Pricing" },

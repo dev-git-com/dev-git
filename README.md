@@ -47,7 +47,7 @@ layout.tsx -> DrawerWrapper.component.tsx -> MiniDrawer.component.tsx
 
 - src/
     - app/ **( routes )**
-        - <route-name-OR-page-name>/
+        - route-name-OR-page-name/
             - components/ **( The Components of the current page )**
                 - Layout.tsx **( The Layout of the current page )**
                 - ...
@@ -71,7 +71,7 @@ layout.tsx -> DrawerWrapper.component.tsx -> MiniDrawer.component.tsx
         - utils/
         - ...
     - features/
-        - <feature-name>/
+        - feature-name/
             - apis/
             - hooks/
             - types/
@@ -82,4 +82,4 @@ layout.tsx -> DrawerWrapper.component.tsx -> MiniDrawer.component.tsx
 
 
 ## Notes:
-- Files started with "-" are not used but we can use it later, for example: "-DockerfileBUN" OR "-favicon.ico"
+- Files starting with "-" are not used but we can use it later, for example: "-DockerfileBUN" OR "-favicon.ico"

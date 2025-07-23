@@ -55,7 +55,7 @@ export function FileUpload({ onFileSelect, selectedFile, className }: FileUpload
               className={cn(
                 "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200",
                 isDragActive && !isDragReject
-                  ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-950/20"
+                  ? "border-indigo-500 bg-indigo-50 dark:bg-slate-950/20"
                   : "border-slate-300 dark:border-slate-700 hover:border-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800/50",
                 isDragReject && "border-red-500 bg-red-50 dark:bg-red-950/20"
               )}

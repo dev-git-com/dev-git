@@ -35,9 +35,9 @@ export function ConfigurationPanel({ config, onConfigChange, className }: Config
           <span>⚙️</span>
           <span>Configuration</span>
         </CardTitle>
-        <CardDescription>
+        {/* <CardDescription>
           Customize your generated NestJS application
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Database Selection */}

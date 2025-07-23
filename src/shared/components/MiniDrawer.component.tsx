@@ -8,6 +8,8 @@ import {
 import Link from "next/link";
 import { useState, useRef } from "react";
 import { usePathname } from "next/navigation";
+import logo from "../../assets/images/logo/logo.png";
+import Image from "next/image";
 
 export const MiniDrawer = ({
   isDrawerOpen,
@@ -39,7 +41,7 @@ export const MiniDrawer = ({
         isDrawerOpen ? "w-64" : "w-20"
       }`}
     >
-      <div className="flex h-16 justify-items-center items-center px-2 border-b border-b-slate-600">
+      {/* <div className="flex h-16 justify-items-center items-center px-2 border-b border-b-slate-600">
         <button
           onClick={() => setIsDrawerOpen(!isDrawerOpen)}
           className="w-full p-2 rounded-lg hover:bg-slate-100 hover:text-slate-500"
@@ -50,6 +52,14 @@ export const MiniDrawer = ({
             <ChevronLeft className="h-6 w-6" />
           )}
         </button>
+      </div> */}
+
+      <div className="justify-center items-center justify-items-center py-2">
+        <Image
+          alt="logo"
+          src={logo}
+          className="self-center justify-center w-14 h-w-14"
+        />
       </div>
       <div
         className={`overflow-y-auto max-h-full pb-28 scrollbar-hide items-center ${

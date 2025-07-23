@@ -9,12 +9,26 @@ export const DrawerWrapper = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const storedValue = localStorage.getItem(EnumLocalStorage.isDrawerOpen);
-    setIsDrawerOpen(storedValue === "true");
+    const shouldBeOpen = storedValue === "true";
+    setIsDrawerOpen(window.innerWidth >= 1000 || shouldBeOpen);
   }, []);
 
   useEffect(() => {
     localStorage.setItem(EnumLocalStorage.isDrawerOpen, String(isDrawerOpen));
   }, [isDrawerOpen]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1030) {
+        setIsDrawerOpen(false);
+      } else {
+        setIsDrawerOpen(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div>

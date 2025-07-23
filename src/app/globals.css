@@ -4,7 +4,7 @@
 
 
 body {
-  @apply bg-slate-900 text-white font-sans;
+  @apply bg-black text-white font-sans;
 }
 
 @layer base {
@@ -63,6 +63,18 @@ body {
   }
 }
 
+.slide-br {
+	animation: slide-br 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-br {
+  0% {
+    transform: translateY(-100px) translateX(-100px);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+}
 
 @layer base {
   * {

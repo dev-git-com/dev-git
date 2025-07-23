@@ -126,9 +126,10 @@ export class CodeGenerator {
   private async generateTableFiles(zip: JSZip, table: TableSchema, data: TemplateData): Promise<void> {
     this.generatedTables.push(table.name);
     const modulePath = `src/modules/${table.name}`;
+    const entitiesPath = `src/entities`;
 
     // Entity
-    zip.file(`${modulePath}/${table.name}.entity.ts`, 
+    zip.file(`${entitiesPath}/${table.name}.entity.ts`, 
       this.templateGenerator.generateEntity(table, data));
 
     // Controller
@@ -166,7 +167,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { ${usersSchemaName} } from '../${usersFilesName}/${usersFilesName}.entity';
+import { ${usersSchemaName} } from 'src/entities/${usersFilesName}.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -254,7 +255,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { ${usersSchemaName} } from '../${usersFilesName}/${usersFilesName}.entity';
+import { ${usersSchemaName} } from 'src/entities/${usersFilesName}.entity';
 import { JwtStrategy } from '../../strategies/jwt.strategy';
 
 @Module({
@@ -516,7 +517,7 @@ export const databaseConfig: TypeOrmModuleAsyncOptions = {
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     synchronize: configService.get<boolean>('DB_SYNCHRONIZE', false),
     logging: configService.get<boolean>('DB_LOGGING', false),
-    ${data.databaseConfig.name === 'postgresql' ? `ssl: configService.get<boolean>('DB_SSL', false) ? { rejectUnauthorized: false } : false,` : ''}
+    // ${data.databaseConfig.name === 'postgresql' ? `ssl: configService.get<boolean>('DB_SSL', false) ? { rejectUnauthorized: false } : false,` : ''}
     ${data.databaseConfig.name === 'mysql' ? `charset: 'utf8mb4',` : ''}
   }),
   inject: [ConfigService],

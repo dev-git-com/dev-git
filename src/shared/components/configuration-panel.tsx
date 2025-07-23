@@ -23,6 +23,7 @@ export function ConfigurationPanel({ config, onConfigChange, className }: Config
   const features = [
     { key: 'with_crud' as const, label: 'CRUD Operations', icon: '🔧' },
     { key: 'full_validations' as const, label: 'Field Validations', icon: '✅' },
+    { key: 'date_logs' as const, label: 'Date Logs', icon: '📆' },
     { key: 'with_swagger' as const, label: 'Swagger Docs', icon: '📚' },
     { key: 'with_ftp' as const, label: 'FTP Support', icon: '📁' },
     { key: 'with_google_auth' as const, label: 'Google OAuth', icon: '🔑' }

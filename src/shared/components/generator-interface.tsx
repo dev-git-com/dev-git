@@ -16,6 +16,7 @@ export function GeneratorInterface() {
     database_type: 1, // PostgreSQL default
     with_crud: true,
     full_validations: true,
+    date_logs: false,
     with_ftp: false,
     with_swagger: true,
     with_google_auth: false,

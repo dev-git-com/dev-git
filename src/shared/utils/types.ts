@@ -3,6 +3,7 @@ export interface GenerationConfig {
   database_type: number; // 1=PostgreSQL, 2=MySQL, 3=SQL Server, 4=Oracle, 5=MongoDB
   with_crud: boolean;
   full_validations: boolean;
+  date_logs: boolean;
   with_ftp: boolean;
   with_swagger: boolean;
   with_google_auth: boolean;

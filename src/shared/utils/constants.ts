@@ -52,6 +52,7 @@ export const DATABASE_CONFIGS: DatabaseConfig[] = [
 export const FEATURE_DESCRIPTIONS = {
   with_crud: 'Generate complete CRUD operations for all tables',
   full_validations: 'Add comprehensive field validations (email, unique, required)',
+  date_logs: 'Add "createdAt" and "updatedAt" fields',
   with_ftp: 'Include FTP configuration and file handling utilities',
   with_swagger: 'Generate Swagger/OpenAPI documentation',
   with_google_auth: 'Add Google OAuth 2.0 authentication setup'

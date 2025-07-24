@@ -171,7 +171,7 @@ ${table.columns.map(col => this.generateEntityColumn(col, data)).join('\n\n')}
 
 ${table.foreignKeys.map(fk => this.generateRelationshipProperty(fk, data)).join('\n\n')}
 
-${data.config.date_logs ? `
+${data.config.date_fields ? `
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   ${data.config.with_swagger ? '@ApiProperty()' : ''}
   createdAt: Date;

@@ -14,7 +14,7 @@ export class CodeGenerator {
     projectName: string = 'generated-nestjs-app'
   ): Promise<Buffer> {
     const databaseConfig = DATABASE_CONFIGS.find(db => db.id === config.database_type)!;
-    
+
     const templateData: TemplateData = {
       projectName,
       tables: parsedSchema.tables,
@@ -35,7 +35,7 @@ export class CodeGenerator {
     }
 
     // Generate authentication module
-    await this.generateAuthModule(zip, templateData);
+    if (config.with_jwt_auth) await this.generateAuthModule(zip, templateData);
 
     // Generate utility files
     await this.generateUtilityFiles(zip, templateData);
@@ -129,26 +129,26 @@ export class CodeGenerator {
     const entitiesPath = `src/entities`;
 
     // Entity
-    zip.file(`${entitiesPath}/${table.name}.entity.ts`, 
+    zip.file(`${entitiesPath}/${table.name}.entity.ts`,
       this.templateGenerator.generateEntity(table, data));
 
     // Controller
-    zip.file(`${modulePath}/${table.name}.controller.ts`, 
+    zip.file(`${modulePath}/${table.name}.controller.ts`,
       this.templateGenerator.generateController(table, data));
 
     // Service
-    zip.file(`${modulePath}/${table.name}.service.ts`, 
+    zip.file(`${modulePath}/${table.name}.service.ts`,
       this.templateGenerator.generateService(table, data));
 
     // DTOs
-    zip.file(`${modulePath}/dto/create-${table.name}.dto.ts`, 
+    zip.file(`${modulePath}/dto/create-${table.name}.dto.ts`,
       this.templateGenerator.generateCreateDto(table, data));
-    
-    zip.file(`${modulePath}/dto/update-${table.name}.dto.ts`, 
+
+    zip.file(`${modulePath}/dto/update-${table.name}.dto.ts`,
       this.templateGenerator.generateUpdateDto(table, data));
 
     // Module
-    zip.file(`${modulePath}/${table.name}.module.ts`, 
+    zip.file(`${modulePath}/${table.name}.module.ts`,
       this.templateGenerator.generateModule(table, data));
   }
 
@@ -510,7 +510,7 @@ export const databaseConfig: TypeOrmModuleAsyncOptions = {
   useFactory: (configService: ConfigService) => ({
     type: '${data.databaseConfig.typeorm}' as any,
     host: configService.get<string>('DB_HOST'),
-    port: configService.get<number>('DB_PORT'),
+    port: +configService.get<number>('DB_PORT'),
     username: configService.get<string>('DB_USERNAME'),
     password: configService.get<string>('DB_PASSWORD'),
     database: configService.get<string>('DB_DATABASE'),

@@ -64,18 +64,12 @@ export const FEATURES = [
     status: "✅"
   },
   { key: "date_fields" as const, label: "Date Fields-Columns", desc: 'Add "createdAt" & "updatedAt" fields or columns for all the tables', icon: "📆", status: "✅" },
-  { key: "with_swagger" as const, label: "Swagger Docs", desc: 'Generate Swagger documentation', icon: "📚", status: "✅" },
-  { key: "with_ftp" as const, label: "FTP Support", desc: 'Include FTP configuration and file handling utilities', icon: "📁", status: "Fixes" },
-  { key: "with_google_auth" as const, label: "Google OAuth", desc: 'Add Google OAuth 2.0 authentication setup', icon: "🔑", status: "Fixes" },
-  { key: "with_jwt_auth" as const, label: "JWT Auth", desc: 'Add JWT auth strategy', icon: "🔐", status: "Fixes" },
+  { key: "with_swagger" as const, label: "Swagger/OpenAPI Docs", desc: 'Generate Swagger/OpenAPI documentation', icon: "📚", status: "✅" },
+  { key: "with_ftp" as const, label: "FTP Support", desc: 'Include FTP configuration and file handling utilities', icon: "📁", status: "Soon!" },
+  { key: "with_google_auth" as const, label: "Google OAuth", desc: 'Add Google OAuth 2.0 authentication setup', icon: "🔑", status: "Soon!" },
+  { key: "with_jwt_auth" as const, label: "JWT Auth", desc: 'Add JWT auth strategy', icon: "🔐", status: "Soon!" },
 ];
 
-export const SQL_DIALECTS = {
-  POSTGRESQL: 'postgresql',
-  MYSQL: 'mysql',
-  MSSQL: 'mssql',
-  ORACLE: 'oracle'
-};
 
 export const TYPE_MAPPINGS = {
   postgresql: {

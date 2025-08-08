@@ -65,6 +65,7 @@ export function ConfigurationPanel({
               {DATABASE_CONFIGS.map((db) =>
                 db.soon ? (
                   <div
+                    key={db.id}
                     className={`flex items-center space-x-2 relative w-full cursor-default select-none rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${
                       db.soon ? "bg-slate-50" : ""
                     }`}
@@ -122,7 +123,9 @@ export function ConfigurationPanel({
                 <div className="flex-1">
                   <p className="text-sm font-medium text-slate-900 dark:text-slate-100 inline-flex items-center gap-2">
                     {feature.label}
-                    <p className="text-amber-500 font-bold">{feature.status}</p>
+                    <span className="text-amber-500 font-bold">
+                      {feature.status}
+                    </span>
                   </p>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
                     {feature.desc}

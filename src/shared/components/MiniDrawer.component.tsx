@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, ChevronLeft, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import {
   IPagesConstants,
   pagesConstants,
@@ -37,29 +37,27 @@ export const MiniDrawer = ({
 
   return (
     <aside
-      className={`bg-slate-950 text-white fixed top-0 left-0 h-full transition-all duration-300 ${
+      className={`bg-slate-950 text-white fixed top-0 left-0 h-full transition-all duration-300 border-r-2 border-slate-700 z-50 ${
         isDrawerOpen ? "w-64" : "w-20"
       }`}
     >
-      {/* <div className="flex h-16 justify-items-center items-center px-2 border-b border-b-slate-600">
-        <button
-          onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-          className="w-full p-2 rounded-lg hover:bg-slate-100 hover:text-slate-500"
-        >
-          {!isDrawerOpen ? (
-            <Menu className="h-6 w-6 justify-self-center" />
-          ) : (
-            <ChevronLeft className="h-6 w-6" />
-          )}
-        </button>
-      </div> */}
-
-      <div className="justify-center items-center justify-items-center py-2">
+      <div
+        className="justify-center items-center justify-items-center py-2 cursor-pointer inline-flex w-full gap-3 font-bold"
+        onClick={() => {
+          setIsDrawerOpen(!isDrawerOpen);
+        }}
+      >
         <Image
           alt="logo"
           src={logo}
           className="self-center justify-center w-14 h-w-14"
         />
+        {isDrawerOpen && (
+          <span className="inline-flex">
+            <p className="text-blue-400">Dev</p>-
+            <p className="text-orange-400">G</p>it
+          </span>
+        )}
       </div>
       <div
         className={`overflow-y-auto max-h-full pb-28 scrollbar-hide items-center ${
@@ -68,7 +66,6 @@ export const MiniDrawer = ({
       >
         {pagesConstants.map((page: any, index: number) => {
           const isActive = pathname.includes(page.route);
-          //* prefetch for docs page only
           const isPrefetchable = page.subMenu
             ? `${page.subMenu[0].route}`.endsWith("docs")
             : page.route.endsWith("docs");
@@ -98,9 +95,7 @@ export const MiniDrawer = ({
                   >
                     {page.icon}
                     {isDrawerOpen && (
-                      <div
-                        className={`w-full flex items-center justify-between`}
-                      >
+                      <div className="w-full flex items-center justify-between">
                         {page.label}
                         {page.subMenu && (
                           <ChevronDown
@@ -141,6 +136,7 @@ export const MiniDrawer = ({
                     )}
                 </Link>
               )}
+
               {isPrefetchable && (
                 <a
                   href={page.subMenu ? `${page.subMenu[0].route}` : page.route}
@@ -163,9 +159,7 @@ export const MiniDrawer = ({
                   >
                     {page.icon}
                     {isDrawerOpen && (
-                      <div
-                        className={`w-full flex items-center justify-between`}
-                      >
+                      <div className="w-full flex items-center justify-between">
                         {page.label}
                         {page.subMenu && (
                           <ChevronDown
@@ -219,7 +213,7 @@ export const MiniDrawer = ({
                       (buttonRefs.current[index]?.getBoundingClientRect()
                         .left ?? 0) +
                       (buttonRefs.current[index]?.offsetWidth ?? 0) +
-                      15, // margin
+                      15,
                   }}
                 >
                   {page.label}

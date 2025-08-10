@@ -1,12 +1,11 @@
+"use client";
 
-'use client';
-
-import React, { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { UploadCloud, File, X, CheckCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from './ui/button';
-import { cn } from '@/lib/utils';
+import React, { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { UploadCloud, File, X, CheckCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -14,25 +13,32 @@ interface FileUploadProps {
   className?: string;
 }
 
-export function FileUpload({ onFileSelect, selectedFile, className }: FileUploadProps) {
+export function FileUpload({
+  onFileSelect,
+  selectedFile,
+  className,
+}: FileUploadProps) {
   const [isDragActive, setIsDragActive] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      onFileSelect(acceptedFiles[0]);
-    }
-    setIsDragActive(false);
-  }, [onFileSelect]);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        onFileSelect(acceptedFiles[0]);
+      }
+      setIsDragActive(false);
+    },
+    [onFileSelect]
+  );
 
   const { getRootProps, getInputProps, isDragReject } = useDropzone({
     onDrop,
     accept: {
-      'application/sql': ['.sql'],
-      'text/plain': ['.sql']
+      "application/sql": [".sql"],
+      "text/plain": [".sql"],
     },
     multiple: false,
     onDragEnter: () => setIsDragActive(true),
-    onDragLeave: () => setIsDragActive(false)
+    onDragLeave: () => setIsDragActive(false),
   });
 
   const removeFile = () => {
@@ -53,7 +59,7 @@ export function FileUpload({ onFileSelect, selectedFile, className }: FileUpload
             <div
               {...getRootProps()}
               className={cn(
-                "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200",
+                "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 bg-white",
                 isDragActive && !isDragReject
                   ? "border-indigo-500 bg-indigo-50 dark:bg-slate-950/20"
                   : "border-slate-300 dark:border-slate-700 hover:border-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800/50",
@@ -67,7 +73,7 @@ export function FileUpload({ onFileSelect, selectedFile, className }: FileUpload
                 className="flex flex-col items-center space-y-4"
               >
                 <div className="p-3 rounded-full bg-slate-100 dark:bg-slate-800">
-                  <UploadCloud 
+                  <UploadCloud
                     className={cn(
                       "h-8 w-8",
                       isDragActive && !isDragReject
@@ -78,10 +84,11 @@ export function FileUpload({ onFileSelect, selectedFile, className }: FileUpload
                 </div>
                 <div className="space-y-2">
                   <p className="text-lg font-medium text-slate-900 dark:text-slate-100">
-                    {isDragActive 
-                      ? (isDragReject ? "Invalid file type" : "Drop your SQL file here")
-                      : "Drop your SQL file here"
-                    }
+                    {isDragActive
+                      ? isDragReject
+                        ? "Invalid file type"
+                        : "Drop your SQL file here"
+                      : "Drop your SQL file here"}
                   </p>
                   <p className="text-sm text-slate-500 dark:text-slate-400">
                     or click to browse files

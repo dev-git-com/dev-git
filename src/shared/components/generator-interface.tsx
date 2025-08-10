@@ -16,9 +16,11 @@ export function GeneratorInterface() {
     database_type: 1, // PostgreSQL default
     with_crud: true,
     full_validations: true,
+    date_fields: false,
     with_ftp: false,
     with_swagger: true,
     with_google_auth: false,
+    with_jwt_auth: false,
   });
   const [outputState, setOutputState] = useState<
     "initial" | "processing" | "success" | "error"
@@ -177,8 +179,7 @@ export function GeneratorInterface() {
           </h2>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
             Transform your SQL schemas into production-ready backends
-            with authentication, CRUD operations, and comprehensive
-            documentation.
+            with authentication, CRUD operations, and comprehensive features!
           </p>
           <p className="text-xl text-red-400 max-w-2xl mx-auto">
             Beta: SQL to NestJS

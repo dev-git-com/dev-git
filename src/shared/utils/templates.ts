@@ -163,7 +163,7 @@ export class AppModule {}`;
     return `import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 ${data.config.full_validations ? "import { IsEmail, IsNotEmpty, IsOptional, IsString, IsNumber, IsBoolean, IsDate } from 'class-validator';" : ''}
 ${data.config.with_swagger ? "import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';" : ''}
-${table.foreignKeys.map(fk => `import { ${this.capitalize(fk.referencesTable)} } from '../${fk.referencesTable}/${fk.referencesTable}.entity';`).join('\n')}
+${table.foreignKeys.map(fk => `import { ${this.capitalize(fk.referencesTable)} } from 'src/entities/${fk.referencesTable}.entity';`).join('\n')}
 
 @Entity('${table.name}')
 export class ${this.capitalize(table.name)} {
@@ -171,7 +171,7 @@ ${table.columns.map(col => this.generateEntityColumn(col, data)).join('\n\n')}
 
 ${table.foreignKeys.map(fk => this.generateRelationshipProperty(fk, data)).join('\n\n')}
 
-${data.config.full_validations ? `
+${data.config.date_fields ? `
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   ${data.config.with_swagger ? '@ApiProperty()' : ''}
   createdAt: Date;
@@ -185,7 +185,7 @@ ${data.config.full_validations ? `
 
   generateEntityColumn(column: TableColumn, data: TemplateData): string {
     const decorators = [];
-    
+
     // TypeORM decorators
     if (column.primary) {
       if (column.autoIncrement) {
@@ -196,11 +196,12 @@ ${data.config.full_validations ? `
     } else {
       const columnOptions = [];
       if (column.length) columnOptions.push(`length: ${column.length}`);
-      if (!column.nullable) columnOptions.push('nullable: false');
+      if (!column.nullable) columnOptions.push('nullable: false'); else columnOptions.push('nullable: true');
       if (column.unique) columnOptions.push('unique: true');
-      if (column.defaultValue) columnOptions.push(`default: '${column.defaultValue}'`);
-      if (column.type === "object" && data.databaseConfig.driver.includes("postgre")) columnOptions.push(`type: 'jsonb'`); //! not like this
-      
+      if ((column.defaultValue ?? "").toLowerCase().includes("time")) columnOptions.push("type: 'timestamp'");
+      if (column.defaultValue) columnOptions.push(`default: ${column.defaultValue.toLowerCase().includes("time") ? '() => ' : ''}'${column.defaultValue}'`);
+      if (column.type === "object" && (data.databaseConfig.driver.includes("postgre") || data.databaseConfig.driver === "pg")) columnOptions.push(`type: 'jsonb'`); //! not like this
+
       const optionsStr = columnOptions.length > 0 ? `{ ${columnOptions.join(', ')} }` : '';
       decorators.push(`@Column(${optionsStr})`);
     }
@@ -240,7 +241,7 @@ ${data.config.full_validations ? `
     }
 
     const typeAnnotation = column.type === 'Date' ? 'Date' : column.type;
-    
+
     return `  ${decorators.join('\n  ')}
   ${column.name}: ${typeAnnotation};`;
   }
@@ -249,7 +250,7 @@ ${data.config.full_validations ? `
     const decorators = [];
     decorators.push(`@ManyToOne(() => ${this.capitalize(fk.referencesTable)})`);
     decorators.push(`@JoinColumn({ name: '${fk.column}' })`);
-    
+
     if (data.config.with_swagger) {
       decorators.push('@ApiPropertyOptional()');
     }
@@ -260,7 +261,7 @@ ${data.config.full_validations ? `
 
   generateController(table: TableSchema, data: TemplateData): string {
     const entityName = this.capitalize(table.name);
-    
+
     return `import {
   Controller,
   Get,
@@ -281,7 +282,7 @@ import { Roles } from '../../decorators/roles.decorator';
 import { ${entityName}Service } from './${table.name}.service';
 import { Create${entityName}Dto } from './dto/create-${table.name}.dto';
 import { Update${entityName}Dto } from './dto/update-${table.name}.dto';
-import { ${entityName} } from './${table.name}.entity';
+import { ${entityName} } from 'src/entities/${table.name}.entity';
 
 ${data.config.with_swagger ? `@ApiTags('${table.name}')` : ''}
 ${data.config.with_swagger ? '@ApiBearerAuth()' : ''}
@@ -380,11 +381,11 @@ export class ${entityName}Controller {
 
   generateService(table: TableSchema, data: TemplateData): string {
     const entityName = this.capitalize(table.name);
-    
+
     return `import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ${entityName} } from './${table.name}.entity';
+import { ${entityName} } from 'src/entities/${table.name}.entity';
 import { Create${entityName}Dto } from './dto/create-${table.name}.dto';
 import { Update${entityName}Dto } from './dto/update-${table.name}.dto';
 
@@ -454,7 +455,7 @@ export class ${entityName}Service {
   generateCreateDto(table: TableSchema, data: TemplateData): string {
     const entityName = this.capitalize(table.name);
     const editableColumns = table.columns.filter(col => !col.primary && !col.autoIncrement);
-    
+
     return `${data.config.full_validations ? "import { IsEmail, IsNotEmpty, IsOptional, IsString, IsNumber, IsBoolean, IsDate } from 'class-validator';" : ''}
 ${data.config.with_swagger ? "import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';" : ''}
 
@@ -465,7 +466,7 @@ ${editableColumns.map(col => this.generateDtoProperty(col, data, false)).join('\
 
   generateUpdateDto(table: TableSchema, data: TemplateData): string {
     const entityName = this.capitalize(table.name);
-    
+
     return `import { PartialType } from '${data.config.with_swagger ? '@nestjs/swagger' : '@nestjs/mapped-types'}';
 import { Create${entityName}Dto } from './create-${table.name}.dto';
 
@@ -474,7 +475,7 @@ export class Update${entityName}Dto extends PartialType(Create${entityName}Dto) 
 
   generateDtoProperty(column: TableColumn, data: TemplateData, isUpdate: boolean): string {
     const decorators = [];
-    
+
     // Validation decorators
     if (data.config.full_validations) {
       if (!column.nullable && !isUpdate) {
@@ -511,19 +512,19 @@ export class Update${entityName}Dto extends PartialType(Create${entityName}Dto) 
 
     const typeAnnotation = column.type === 'Date' ? 'Date' : column.type;
     const optional = column.nullable || isUpdate ? '?' : '';
-    
+
     return `  ${decorators.join('\n  ')}
   ${column.name}${optional}: ${typeAnnotation};`;
   }
 
   generateModule(table: TableSchema, data: TemplateData): string {
     const entityName = this.capitalize(table.name);
-    
+
     return `import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ${entityName}Service } from './${table.name}.service';
 import { ${entityName}Controller } from './${table.name}.controller';
-import { ${entityName} } from './${table.name}.entity';
+import { ${entityName} } from 'src/entities/${table.name}.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([${entityName}])],

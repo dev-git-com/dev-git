@@ -66,18 +66,25 @@ export const MiniDrawer = ({
           !isDrawerOpen ? "justify-items-center" : ""
         }`}
       >
-        {pagesConstants.map((page, index) => {
+        {pagesConstants.map((page: any, index: number) => {
           const isActive = pathname.includes(page.route);
+          //* prefetch for docs page only
+          const isPrefetchable = page.subMenu
+            ? `${page.subMenu[0].route}`.endsWith("docs")
+            : page.route.endsWith("docs");
+
           return (
             <div className="px-2 py-3" key={`${page.route}-${index}`}>
-              <Link
-                href={page.subMenu ? `${page.subMenu[0].route}` : page.route}
-              >
-                <button
-                  ref={(el: HTMLButtonElement | null) => {
-                    buttonRefs.current[index] = el;
-                  }}
-                  className={`w-full flex items-center px-4 py-2 rounded-lg
+              {!isPrefetchable && (
+                <Link
+                  prefetch={true}
+                  href={page.subMenu ? `${page.subMenu[0].route}` : page.route}
+                >
+                  <button
+                    ref={(el: HTMLButtonElement | null) => {
+                      buttonRefs.current[index] = el;
+                    }}
+                    className={`w-full flex items-center px-4 py-2 rounded-lg
                     ${
                       page.route === "/"
                         ? "bg-blue-900 text-white"
@@ -85,50 +92,121 @@ export const MiniDrawer = ({
                         ? "bg-slate-700 text-white"
                         : "hover:bg-white hover:text-slate-900"
                     } gap-3`}
-                  onMouseEnter={() => handleMouseEnter(index)}
-                  onMouseLeave={handleMouseLeave}
-                  onClick={() => page.subMenu && toggleSubMenu(index)}
-                >
-                  {page.icon}
-                  {isDrawerOpen && (
-                    <div className={`w-full flex items-center justify-between`}>
-                      {page.label}
-                      {page.subMenu && (
-                        <ChevronDown
-                          className={`${
-                            openSubMenuIndex === index
-                              ? "rotate-180"
-                              : "rotate-0"
-                          } transition-transform`}
-                        />
-                      )}
-                    </div>
-                  )}
-                </button>
-                {isDrawerOpen && page.subMenu && openSubMenuIndex === index && (
-                  <div className="space-y-2 ml-5 mt-2 rounded-lg">
-                    {page.subMenu.map(
-                      (page: IPagesConstants, subIndex: number) => {
-                        const isActive = pathname === page.route;
-                        return (
-                          <Link
-                            href={page.route}
-                            key={`${page.route}-${subIndex}`}
-                            className={`flex items-center px-2 py-2 gap-3 rounded-lg ${
-                              isActive
-                                ? "bg-slate-700 text-white"
-                                : "hover:bg-white hover:text-slate-900"
-                            }`}
-                          >
-                            {page.icon}
-                            <p>{page.label}</p>
-                          </Link>
-                        );
-                      }
+                    onMouseEnter={() => handleMouseEnter(index)}
+                    onMouseLeave={handleMouseLeave}
+                    onClick={() => page.subMenu && toggleSubMenu(index)}
+                  >
+                    {page.icon}
+                    {isDrawerOpen && (
+                      <div
+                        className={`w-full flex items-center justify-between`}
+                      >
+                        {page.label}
+                        {page.subMenu && (
+                          <ChevronDown
+                            className={`${
+                              openSubMenuIndex === index
+                                ? "rotate-180"
+                                : "rotate-0"
+                            } transition-transform`}
+                          />
+                        )}
+                      </div>
                     )}
-                  </div>
-                )}
-              </Link>
+                  </button>
+                  {isDrawerOpen &&
+                    page.subMenu &&
+                    openSubMenuIndex === index && (
+                      <div className="space-y-2 ml-5 mt-2 rounded-lg">
+                        {page.subMenu.map(
+                          (page: IPagesConstants, subIndex: number) => {
+                            const isActive = pathname === page.route;
+                            return (
+                              <Link
+                                href={page.route}
+                                key={`${page.route}-${subIndex}`}
+                                className={`flex items-center px-2 py-2 gap-3 rounded-lg ${
+                                  isActive
+                                    ? "bg-slate-700 text-white"
+                                    : "hover:bg-white hover:text-slate-900"
+                                }`}
+                              >
+                                {page.icon}
+                                <p>{page.label}</p>
+                              </Link>
+                            );
+                          }
+                        )}
+                      </div>
+                    )}
+                </Link>
+              )}
+              {isPrefetchable && (
+                <a
+                  href={page.subMenu ? `${page.subMenu[0].route}` : page.route}
+                >
+                  <button
+                    ref={(el: HTMLButtonElement | null) => {
+                      buttonRefs.current[index] = el;
+                    }}
+                    className={`w-full flex items-center px-4 py-2 rounded-lg
+                    ${
+                      page.route === "/"
+                        ? "bg-blue-900 text-white"
+                        : isActive
+                        ? "bg-slate-700 text-white"
+                        : "hover:bg-white hover:text-slate-900"
+                    } gap-3`}
+                    onMouseEnter={() => handleMouseEnter(index)}
+                    onMouseLeave={handleMouseLeave}
+                    onClick={() => page.subMenu && toggleSubMenu(index)}
+                  >
+                    {page.icon}
+                    {isDrawerOpen && (
+                      <div
+                        className={`w-full flex items-center justify-between`}
+                      >
+                        {page.label}
+                        {page.subMenu && (
+                          <ChevronDown
+                            className={`${
+                              openSubMenuIndex === index
+                                ? "rotate-180"
+                                : "rotate-0"
+                            } transition-transform`}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </button>
+                  {isDrawerOpen &&
+                    page.subMenu &&
+                    openSubMenuIndex === index && (
+                      <div className="space-y-2 ml-5 mt-2 rounded-lg">
+                        {page.subMenu.map(
+                          (page: IPagesConstants, subIndex: number) => {
+                            const isActive = pathname === page.route;
+                            return (
+                              <Link
+                                href={page.route}
+                                key={`${page.route}-${subIndex}`}
+                                className={`flex items-center px-2 py-2 gap-3 rounded-lg ${
+                                  isActive
+                                    ? "bg-slate-700 text-white"
+                                    : "hover:bg-white hover:text-slate-900"
+                                }`}
+                              >
+                                {page.icon}
+                                <p>{page.label}</p>
+                              </Link>
+                            );
+                          }
+                        )}
+                      </div>
+                    )}
+                </a>
+              )}
+
               {!isDrawerOpen && hoveredIndex === index && (
                 <p
                   className="fixed bg-slate-700 text-white text-sm px-3 py-2 rounded-lg"

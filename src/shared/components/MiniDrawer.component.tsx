@@ -71,7 +71,7 @@ export const MiniDrawer = ({
             : page.route.endsWith("docs");
 
           return (
-            <div className="px-2 py-3" key={`${page.route}-${index}`}>
+            <div className="px-2 py-2" key={`${page.route}-${index}`}>
               {!isPrefetchable && (
                 <Link
                   prefetch={true}

@@ -94,7 +94,7 @@ const AnimatedNetworkNodes: React.FC = () => {
           <span className="text-white/60">{" > "}</span>
           <span className="text-amber-600/60">{"git"}</span>
           <sup className="text-slate-600/50">
-            <em>{" beta "}</em>
+            <em>{" alpha "}</em>
           </sup>
         </div>
         <div className={styles.networkRight} ref={networkRightRef}></div>

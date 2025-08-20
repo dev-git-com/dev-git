@@ -55,21 +55,22 @@ export const DATABASE_CONFIGS: DatabaseConfig[] = [
 ];
 
 export const FEATURES = [
-  { key: "with_crud" as const, label: "CRUD Operations", desc: 'Generate complete CRUD operations for all tables', icon: "🔧", status: "✅" },
+  { key: "with_entities" as const, label: "Entities & Schemas", desc: 'Generate all the tables with their relations', icon: "⛁", status: "✅", canEdit: false },
+  { key: "with_crud" as const, label: "CRUD Operations", desc: 'Generate complete CRUD operations for all tables', icon: "🔧", status: "✅", canEdit: false },
+  { key: "with_swagger" as const, label: "Swagger/OpenAPI Docs", desc: 'Generate Swagger/OpenAPI documentation', icon: "📚", status: "✅", canEdit: true },
   {
     key: "full_validations" as const,
     label: "Field Validations",
     desc: 'Add comprehensive field validations (email, unique, required, etc.)',
     icon: "🔍",
-    status: "✅"
+    status: "✅",
+    canEdit: true,
   },
-  { key: "date_fields" as const, label: "Date Fields-Columns", desc: 'Add "createdAt" & "updatedAt" fields or columns for all the tables', icon: "📆", status: "✅" },
-  { key: "with_swagger" as const, label: "Swagger/OpenAPI Docs", desc: 'Generate Swagger/OpenAPI documentation', icon: "📚", status: "✅" },
-  { key: "with_ftp" as const, label: "FTP Support", desc: 'Include FTP configuration and file handling utilities', icon: "📁", status: "Soon!" },
-  { key: "with_google_auth" as const, label: "Google OAuth", desc: 'Add Google OAuth 2.0 authentication setup', icon: "🔑", status: "Soon!" },
-  { key: "with_jwt_auth" as const, label: "JWT Auth", desc: 'Add JWT auth strategy', icon: "🔐", status: "Soon!" },
+  { key: "with_jwt_auth" as const, label: "JWT Auth", desc: 'Add JWT auth strategy', icon: "🔐", status: "Soon!", canEdit: true },
+  { key: "date_fields" as const, label: "Date Fields Columns", desc: 'Add "createdAt" & "updatedAt" fields or columns for all the tables', icon: "📆", status: "Soon!", canEdit: true },
+  { key: "with_ftp" as const, label: "FTP Support", desc: 'Include FTP configuration and file handling utilities', icon: "📁", status: "Soon!", canEdit: true },
+  { key: "with_google_auth" as const, label: "Google OAuth", desc: 'Add Google OAuth 2.0 authentication setup', icon: "🇬", status: "Soon!", canEdit: true },
 ];
-
 
 export const TYPE_MAPPINGS = {
   postgresql: {

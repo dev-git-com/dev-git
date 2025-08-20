@@ -31,14 +31,17 @@ export class CodeGenerator {
 
     // Generate entities and modules for each table
     for (const table of parsedSchema.tables) {
-      await this.generateTableFiles(zip, table, templateData);
+      this.generatedTables.push(table.name);
+      if(config.with_entities) await this.generateTableFiles(zip, table, templateData);
+      if(config.with_crud) await this.generateCRUDFiles(zip, table, templateData);
     }
 
     // Generate authentication module
-    if (config.with_jwt_auth) await this.generateAuthModule(zip, templateData);
-
-    // Generate utility files
-    await this.generateUtilityFiles(zip, templateData);
+    if (config.with_jwt_auth) {
+      await this.generateAuthModule(zip, templateData);
+      // Generate utility files
+      await this.generateUtilityFiles(zip, templateData);
+    }
 
     // Generate configuration files
     await this.generateConfigFiles(zip, templateData);
@@ -124,13 +127,15 @@ export class CodeGenerator {
   }
 
   private async generateTableFiles(zip: JSZip, table: TableSchema, data: TemplateData): Promise<void> {
-    this.generatedTables.push(table.name);
-    const modulePath = `src/modules/${table.name}`;
     const entitiesPath = `src/entities`;
 
     // Entity
     zip.file(`${entitiesPath}/${table.name}.entity.ts`,
       this.templateGenerator.generateEntity(table, data));
+  }
+
+  private async generateCRUDFiles(zip: JSZip, table: TableSchema, data: TemplateData): Promise<void> {
+    const modulePath = `src/modules/${table.name}`;
 
     // Controller
     zip.file(`${modulePath}/${table.name}.controller.ts`,
@@ -151,6 +156,7 @@ export class CodeGenerator {
     zip.file(`${modulePath}/${table.name}.module.ts`,
       this.templateGenerator.generateModule(table, data));
   }
+
 
   private async generateAuthModule(zip: JSZip, data: TemplateData): Promise<void> {
     const authPath = 'src/modules/auth';
@@ -386,7 +392,7 @@ export const Roles = (...roles: string[]) => SetMetadata(ROLES_KEY, roles);`);
   ${data.userRoles.map(role => `${role.toUpperCase()} = '${role}'`).join(',\n  ')}
 }`);
 
-    // Utilities
+    // date.util
     zip.file('src/utils/date.util.ts', `export class DateUtil {
   static toUTC(date: Date): Date {
     return new Date(date.getTime() + date.getTimezoneOffset() * 60000);

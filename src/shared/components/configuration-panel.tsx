@@ -44,14 +44,30 @@ export function ConfigurationPanel({
         </CardTitle>
         {/* <CardDescription>
           Customize your generated NestJS application
-        </CardDescription> */}
+          </CardDescription> */}
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Database Selection */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-slate-900 dark:text-slate-100">
+          <div className="w-full h-10 bg-slate-100 dark:bg-slate-700 border border-slate-500 border-dashed rounded-lg items-center flex justify-center">
+            <label className="flex gap-2 text-sm font-medium text-slate-900 dark:text-slate-100">
+              Select Backend Framework
+              <p className="text-amber-500 font-bold">Soon!</p>
+            </label>
+          </div>
+          <div className="w-full h-10 bg-slate-100 dark:bg-slate-700 border border-slate-500 border-dashed rounded-lg items-center flex justify-center">
+            <label className="flex gap-2 text-sm font-medium text-slate-900 dark:text-slate-100">
+              Select ORM Type
+              <p className="text-amber-500 font-bold">Soon!</p>
+            </label>
+          </div>
+          <div className="text-sm font-medium text-slate-900 dark:text-slate-100">
             Output Database Type
-          </label>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Choose the target database for your generated application
+            </p>
+          </div>
+
           <Select
             value={config.database_type.toString()}
             onValueChange={(value) =>
@@ -66,8 +82,8 @@ export function ConfigurationPanel({
                 db.soon ? (
                   <div
                     key={db.id}
-                    className={`flex items-center space-x-2 relative w-full cursor-default select-none rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${
-                      db.soon ? "bg-slate-50" : ""
+                    className={`flex items-center space-x-2 relative w-full cursor-default select-none py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 ${
+                      db.soon ? "bg-slate-50 dark:bg-slate-700" : ""
                     }`}
                   >
                     <span>{db.icon}</span>
@@ -87,22 +103,6 @@ export function ConfigurationPanel({
               )}
             </SelectContent>
           </Select>
-
-          <div className="w-full h-10 bg-slate-100 border border-slate-500 border-dashed rounded-lg items-center flex justify-center">
-            <label className="flex gap-2 text-sm font-medium text-slate-900 dark:text-slate-100">
-              Select ORM Type
-              <p className="text-amber-500 font-bold">Soon!</p>
-            </label>
-          </div>
-          <div className="w-full h-10 bg-slate-100 border border-slate-500 border-dashed rounded-lg items-center flex justify-center">
-            <label className="flex gap-2 text-sm font-medium text-slate-900 dark:text-slate-100">
-              Select Backend Framework
-              <p className="text-amber-500 font-bold">Soon!</p>
-            </label>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Choose the target database for your generated application
-          </p>
         </div>
 
         {/* Feature Toggles */}

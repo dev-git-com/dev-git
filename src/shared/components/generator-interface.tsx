@@ -14,6 +14,7 @@ export function GeneratorInterface() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [config, setConfig] = useState<GenerationConfig>({
     database_type: 1, // PostgreSQL default
+    with_entities: true,
     with_crud: true,
     full_validations: true,
     date_fields: false,
@@ -171,18 +172,18 @@ export function GeneratorInterface() {
             <span className="text-white">{" > "}</span>
             <span className="text-amber-600">{"git"}</span>
             <sup className="text-slate-600">
-              <em>{" beta "}</em>
+              <em>{" alpha "}</em>
             </sup>
           </h2>
           <h2 className="text-4xl font-bold text-white mb-4">
             One Click - Generate Complete Backend Applications
           </h2>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Transform your SQL schemas into production-ready backends
-            with authentication, CRUD operations, and comprehensive features!
+            Transform your SQL schemas into production-ready backends with
+            authentication, CRUD operations, and comprehensive features!
           </p>
           <p className="text-xl text-red-400 max-w-2xl mx-auto">
-            Beta: SQL to NestJS
+            Alpha: SQL to NestJS
           </p>
         </motion.div>
 
@@ -196,17 +197,32 @@ export function GeneratorInterface() {
           >
             {/* File Upload */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">
-                1. Upload SQL Schema{" "}
-                <a
-                  className="text-blue-400"
-                  target="_blank"
-                  href="https://onecompiler.com/"
-                >
-                  {" "}
-                  Use OneCompiler.com Site
-                </a>
-              </h3>
+              <div className="w-full">
+                <h3 className="text-lg font-semibold text-white">
+                  1. Upload SQL Schema
+                </h3>
+                <p className="text-white flex flex-wrap items-center">
+                  Use
+                  <a
+                    className="text-blue-400 px-1 underline hover:text-blue-300"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://onecompiler.com/"
+                  >
+                    OneCompiler.com
+                  </a>
+                  or
+                  <a
+                    className="text-blue-400 px-1 underline hover:text-blue-300"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://dbdiagram.io/"
+                  >
+                    dbdiagram.io
+                  </a>
+                </p>
+              </div>
+
               <FileUpload
                 onFileSelect={handleFileSelect}
                 selectedFile={selectedFile}

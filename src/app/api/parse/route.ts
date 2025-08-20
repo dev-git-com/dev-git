@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    
+
     if (!file) {
       return NextResponse.json(
         { error: 'No SQL file provided' },
@@ -15,8 +15,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Read file content
-    const sqlContent = await file.text();
-    
+    let sqlContent = await file.text();
+    // 
+    const charsToRemove = ['"', '`'];
+    for (const ch of charsToRemove) {
+      sqlContent = sqlContent.replaceAll(ch, '');
+    }
+
     if (!sqlContent.trim()) {
       return NextResponse.json(
         { error: 'SQL file is empty' },
@@ -45,8 +50,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Parse error:', error);
     return NextResponse.json(
-      { 
-        error: 'Failed to parse SQL file', 
+      {
+        error: 'Failed to parse SQL file',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }

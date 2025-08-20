@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     const zipBuffer = await generator.generateProject(parsedSchema, config, projectName);
 
     // Return zip file
-    return new NextResponse(zipBuffer, {
+    return new NextResponse(zipBuffer as any, {
       status: 200,
       headers: {
         'Content-Type': 'application/zip',

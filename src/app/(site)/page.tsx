@@ -1,8 +1,7 @@
 "use client";
-import "@/app/globals.css";
 import AnimatedNetworkNodes from "@/shared/components/AnimatedNetworkNodes";
 import Image from "next/image";
-import logo from "../assets/images/logo/logo.png";
+import logo from "@/assets/images/logo/logo.png";
 import Link from "next/link";
 
 const Home = () => {
@@ -44,7 +43,7 @@ const Home = () => {
         <div className="px-10 w-[250px] h-[200px] md:lg:w-[350px] rounded-lg">
           <iframe
             className="w-full h-full object-cover scale-[1.5] rounded-lg"
-            src="https://www.youtube.com/embed/WCwD_1Qm218?autoplay=1&mute=0&loop=1&playlist=WCwD_1Qm218"
+            src="https://www.youtube.com/embed/WCwD_1Qm218?autoplay=0&mute=0&loop=1&playlist=WCwD_1Qm218"
             title="YouTube Short"
             frameBorder="0"
             allow="autoplay; encrypted-media"

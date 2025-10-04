@@ -1,11 +1,14 @@
 
 export interface GenerationConfig {
   database_type: number; // 1=PostgreSQL, 2=MySQL, 3=SQL Server, 4=Oracle, 5=MongoDB
+  with_entities: boolean;
   with_crud: boolean;
   full_validations: boolean;
+  date_fields: boolean;
   with_ftp: boolean;
   with_swagger: boolean;
   with_google_auth: boolean;
+  with_jwt_auth: boolean;
 }
 
 export interface DatabaseConfig {
@@ -16,6 +19,7 @@ export interface DatabaseConfig {
   driver: string;
   typeorm: string;
   port: number;
+  soon?: boolean;
 }
 
 export interface TableColumn {

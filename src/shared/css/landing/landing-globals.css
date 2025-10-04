@@ -1,0 +1,61 @@
+.landing-main {
+  --font-source-code-pro: 'Source Code Pro', monospace !important;
+  --font-mozilla-text: 'Mozilla Text', sans-serif !important;
+
+  --color-primary: #3b82f6 !important;
+  --color-accent: #f97316 !important;
+  --color-light: #ffffff !important;
+  --color-text-secondary: #9ca3af !important;
+  --color-light-transparent: #ffffff4a !important;
+  --color-dark: #2d2d2d !important;
+  --color-black: #000000 !important;
+
+
+  /* utility colors */
+  --color-card-bg-light: #0a0a0a !important;
+
+  --color-table-card-bg: #0f0f0f !important;
+
+  --color-tradition-card-bg: #2d1b1b !important;
+  --color-tradition-card-border: #dc2626 !important;
+  --color-tradition-card-title: #ef4444 !important;
+  --color-tradition-card-text: #fca5a5 !important;
+  --color-devgit-card-bg: #1e2a3a !important;
+  --color-devgit-card-text: #93c5fd !important;
+
+  --color-progress-fill-start: #4ade80 !important;
+  --color-progress-fill-end: #22c55e !important;
+
+  --color-timeline-card-bg: #3a3a3a !important;
+
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  background-color: black !important;
+  font-family: var(--font-mozilla-text) !important;
+  letter-spacing: 1px !important;
+
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+.sectionContainer {
+  width: 1300px;
+  padding-left: 6rem;
+  padding-right: 6rem;
+}
+
+@media (max-width: 1228px) {
+  .sectionContainer {
+    width: 100%;
+    padding: 0 3rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .sectionContainer {
+    padding: 0 1rem;
+  }
+}

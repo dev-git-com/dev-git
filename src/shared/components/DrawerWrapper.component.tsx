@@ -3,28 +3,79 @@
 import { useState, useEffect } from "react";
 import { EnumLocalStorage } from "@/shared/constants/LocalStorage.constants";
 import { MiniDrawer } from "./MiniDrawer.component";
+import { Menu } from "lucide-react";
 
 export const DrawerWrapper = ({ children }: { children: React.ReactNode }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const storedValue = localStorage.getItem(EnumLocalStorage.isDrawerOpen);
-    setIsDrawerOpen(storedValue === "true");
+    const updateScreenSize = () => {
+      const tablet = window.innerWidth < 900;
+      const mobile = window.innerWidth < 600;
+      setIsTablet(tablet);
+      setIsMobile(mobile);
+
+      if (!tablet) {
+        const storedValue = localStorage.getItem(EnumLocalStorage.isDrawerOpen);
+        const shouldBeOpen = storedValue === "true";
+        setIsDrawerOpen(window.innerWidth >= 1000 || shouldBeOpen);
+      } else {
+        setIsDrawerOpen(false);
+      }
+    };
+
+    updateScreenSize();
+    window.addEventListener("resize", updateScreenSize);
+    return () => window.removeEventListener("resize", updateScreenSize);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(EnumLocalStorage.isDrawerOpen, String(isDrawerOpen));
-  }, [isDrawerOpen]);
+    if (!isTablet) {
+      localStorage.setItem(EnumLocalStorage.isDrawerOpen, String(isDrawerOpen));
+    }
+  }, [isDrawerOpen, isTablet]);
 
   return (
-    <div>
-      <MiniDrawer
-        isDrawerOpen={isDrawerOpen}
-        setIsDrawerOpen={setIsDrawerOpen}
-      />
-      <main className={`${isDrawerOpen ? "ml-72" : "ml-24"} duration-300`}>
-        {children}
-      </main>
-    </div>
+    <main
+      className={`${
+        isDrawerOpen && !isTablet ? "ml-[256px]" : isMobile ? "ml-0" : "ml-20"
+      } duration-300`}
+    >
+      {isMobile && !isDrawerOpen ? (
+        // Mobile app bar
+        <div className="fixed top-0 left-2 z-50">
+          <div
+            className="justify-center items-center justify-items-center py-2 cursor-pointer inline-flex w-full gap-3 font-bold"
+            onClick={() => {
+              setIsDrawerOpen(!isDrawerOpen);
+            }}
+          >
+            <Menu />
+            {isDrawerOpen && (
+              <span className="inline-flex">
+                <p className="text-blue-400">Dev</p>-
+                <p className="text-orange-400">G</p>it
+              </span>
+            )}
+          </div>
+        </div>
+      ) : (
+        <MiniDrawer
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen}
+        />
+      )}
+
+      {(isMobile || isTablet) && isDrawerOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsDrawerOpen(false)}
+        />
+      )}
+
+      {children}
+    </main>
   );
 };

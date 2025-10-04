@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('file') as File;
     const config = JSON.parse(formData.get('config') as string) as GenerationConfig;
-    
+
     if (!file) {
       return NextResponse.json(
         { error: 'No SQL file provided' },
@@ -27,8 +27,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Read file content
-    const sqlContent = await file.text();
-    
+    let sqlContent = await file.text();
+    // 
+    const charsToRemove = ['"', '`'];
+    for (const ch of charsToRemove) {
+      sqlContent = sqlContent.replaceAll(ch, '');
+    }
+
     if (!sqlContent.trim()) {
       return NextResponse.json(
         { error: 'SQL file is empty' },
@@ -55,7 +60,7 @@ export async function POST(request: NextRequest) {
     const zipBuffer = await generator.generateProject(parsedSchema, config, projectName);
 
     // Return zip file
-    return new NextResponse(zipBuffer, {
+    return new NextResponse(zipBuffer as any, {
       status: 200,
       headers: {
         'Content-Type': 'application/zip',
@@ -67,8 +72,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Generation error:', error);
     return NextResponse.json(
-      { 
-        error: 'Failed to generate project', 
+      {
+        error: 'Failed to generate project',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }

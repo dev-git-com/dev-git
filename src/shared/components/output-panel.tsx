@@ -53,9 +53,9 @@ export function OutputPanel({
           <span>📦</span>
           <span>Output</span>
         </CardTitle>
-        <CardDescription>
+        {/* <CardDescription>
           Your generated NestJS application will appear here
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <AnimatePresence mode="wait">
@@ -75,7 +75,7 @@ export function OutputPanel({
                   How It Works
                 </h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
-                  Upload your SQL schema and get a complete NestJS application
+                  Upload your SQL schema and get a complete backend application
                 </p>
               </div>
 

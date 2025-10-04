@@ -1,38 +1,42 @@
+"use client";
 
-'use client';
-
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Wand2, Github, Zap } from 'lucide-react';
-import { Button } from './ui/button';
-import { FileUpload } from './file-upload';
-import { ConfigurationPanel } from './configuration-panel';
-import { OutputPanel } from './output-panel';
-import { GenerationConfig } from '../utils/types';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Wand2, Github, Zap } from "lucide-react";
+import { Button } from "./ui/button";
+import { FileUpload } from "./file-upload";
+import { ConfigurationPanel } from "./configuration-panel";
+import { OutputPanel } from "./output-panel";
+import { GenerationConfig } from "../utils/types";
+import { useToast } from "@/hooks/use-toast";
 
 export function GeneratorInterface() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [config, setConfig] = useState<GenerationConfig>({
     database_type: 1, // PostgreSQL default
+    with_entities: true,
     with_crud: true,
     full_validations: true,
+    date_fields: false,
     with_ftp: false,
     with_swagger: true,
-    with_google_auth: false
+    with_google_auth: false,
+    with_jwt_auth: false,
   });
-  const [outputState, setOutputState] = useState<'initial' | 'processing' | 'success' | 'error'>('initial');
-  const [error, setError] = useState<string>('');
-  const [processingStatus, setProcessingStatus] = useState<string>('');
+  const [outputState, setOutputState] = useState<
+    "initial" | "processing" | "success" | "error"
+  >("initial");
+  const [error, setError] = useState<string>("");
+  const [processingStatus, setProcessingStatus] = useState<string>("");
   const [schema, setSchema] = useState<any>(null);
   const { toast } = useToast();
 
   const handleFileSelect = (file: File | null) => {
     setSelectedFile(file);
-    setOutputState('initial');
-    setError('');
+    setOutputState("initial");
+    setError("");
     setSchema(null);
-    
+
     // Parse file immediately for preview
     if (file) {
       parseFile(file);
@@ -42,30 +46,31 @@ export function GeneratorInterface() {
   const parseFile = async (file: File) => {
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
-      const response = await fetch('/api/parse', {
-        method: 'POST',
+      const response = await fetch("/api/parse", {
+        method: "POST",
         body: formData,
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to parse file');
+        throw new Error(errorData.error || "Failed to parse file");
       }
 
       const result = await response.json();
       setSchema(result.schema);
-      
+
       toast({
         title: "File parsed successfully",
         description: `Found ${result.schema.tableCount} tables in your SQL schema`,
       });
     } catch (err) {
-      console.error('Parse error:', err);
+      console.error("Parse error:", err);
       toast({
         title: "Parse error",
-        description: err instanceof Error ? err.message : 'Failed to parse SQL file',
+        description:
+          err instanceof Error ? err.message : "Failed to parse SQL file",
         variant: "destructive",
       });
     }
@@ -81,58 +86,60 @@ export function GeneratorInterface() {
       return;
     }
 
-    setOutputState('processing');
-    setError('');
+    setOutputState("processing");
+    setError("");
 
     try {
-      setProcessingStatus('Parsing SQL schema...');
-      
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-      formData.append('config', JSON.stringify(config));
+      setProcessingStatus("Parsing SQL schema...");
 
-      setProcessingStatus('Generating TypeORM entities...');
-      
-      const response = await fetch('/api/generate', {
-        method: 'POST',
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("config", JSON.stringify(config));
+
+      setProcessingStatus("Generating TypeORM entities...");
+
+      const response = await fetch("/api/generate", {
+        method: "POST",
         body: formData,
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Generation failed');
+        throw new Error(errorData.error || "Generation failed");
       }
 
-      setProcessingStatus('Creating project files...');
-      
+      setProcessingStatus("Creating project files...");
+
       // Get the zip file
       const blob = await response.blob();
-      
-      setProcessingStatus('Finalizing download...');
-      
+
+      setProcessingStatus("Finalizing download...");
+
       // Create download link
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `${selectedFile.name.replace('.sql', '')}-nestjs-app.zip`;
+      a.download = `${selectedFile.name.replace(".sql", "")}-nestjs-app.zip`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      setOutputState('success');
+      setOutputState("success");
       toast({
         title: "Generation complete!",
         description: "Your NestJS application has been downloaded",
       });
-
     } catch (err) {
-      console.error('Generation error:', err);
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
-      setOutputState('error');
+      console.error("Generation error:", err);
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred"
+      );
+      setOutputState("error");
       toast({
         title: "Generation failed",
-        description: err instanceof Error ? err.message : 'An unexpected error occurred',
+        description:
+          err instanceof Error ? err.message : "An unexpected error occurred",
         variant: "destructive",
       });
     }
@@ -151,7 +158,7 @@ export function GeneratorInterface() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200">
+    <div className="min-h-screen text-slate-200">
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-8">
         <motion.div
@@ -160,11 +167,23 @@ export function GeneratorInterface() {
           transition={{ delay: 0.2 }}
           className="text-center mb-12"
         >
+          <h2 className="text-4xl">
+            <span className="text-blue-700">{"dev"}</span>
+            <span className="text-white">{" > "}</span>
+            <span className="text-amber-600">{"git"}</span>
+            <sup className="text-slate-600">
+              <em>{" alpha "}</em>
+            </sup>
+          </h2>
           <h2 className="text-4xl font-bold text-white mb-4">
-            One Click - Generate Complete NestJS Applications
+            One Click - Generate Complete Backend Applications
           </h2>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Transform your SQL schemas into production-ready NestJS backends with authentication, CRUD operations, and comprehensive documentation.
+            Transform your SQL schemas into production-ready backends with
+            authentication, CRUD operations, and comprehensive features!
+          </p>
+          <p className="text-xl text-red-400 max-w-2xl mx-auto">
+            Alpha: SQL to NestJS
           </p>
         </motion.div>
 
@@ -178,9 +197,32 @@ export function GeneratorInterface() {
           >
             {/* File Upload */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">
-                1. Upload SQL Schema <a className='text-blue-400' target='_blank' href='https://onecompiler.com/'> Use OneCompiler.com Site</a>
-              </h3>
+              <div className="w-full">
+                <h3 className="text-lg font-semibold text-white">
+                  1. Upload SQL Schema
+                </h3>
+                <p className="text-white flex flex-wrap items-center">
+                  Use
+                  <a
+                    className="text-blue-400 px-1 underline hover:text-blue-300"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://onecompiler.com/"
+                  >
+                    OneCompiler.com
+                  </a>
+                  or
+                  <a
+                    className="text-blue-400 px-1 underline hover:text-blue-300"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://dbdiagram.io/"
+                  >
+                    dbdiagram.io
+                  </a>
+                </p>
+              </div>
+
               <FileUpload
                 onFileSelect={handleFileSelect}
                 selectedFile={selectedFile}
@@ -192,10 +234,7 @@ export function GeneratorInterface() {
               <h3 className="text-lg font-semibold text-white">
                 2. Configure Features
               </h3>
-              <ConfigurationPanel
-                config={config}
-                onConfigChange={setConfig}
-              />
+              <ConfigurationPanel config={config} onConfigChange={setConfig} />
             </div>
 
             {/* Generate Button */}
@@ -206,12 +245,14 @@ export function GeneratorInterface() {
             >
               <Button
                 onClick={handleGenerate}
-                disabled={!selectedFile || outputState === 'processing'}
+                disabled={!selectedFile || outputState === "processing"}
                 className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-lg"
                 size="lg"
               >
                 <Wand2 className="h-5 w-5 mr-2" />
-                {outputState === 'processing' ? 'Generating...' : 'Generate Application'}
+                {outputState === "processing"
+                  ? "Generating..."
+                  : "Generate Application"}
               </Button>
             </motion.div>
           </motion.div>
@@ -243,7 +284,8 @@ export function GeneratorInterface() {
       >
         <div className="max-w-6xl mx-auto px-4 py-8 text-center">
           <p className="text-slate-400">
-            A tool for the modern developer. Built with ❤️ for the NestJS community.
+            A tool for the modern developer. Built with ❤️ for the Backend
+            community.
           </p>
         </div>
       </motion.footer>

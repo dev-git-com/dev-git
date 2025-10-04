@@ -9,7 +9,8 @@ export const DATABASE_CONFIGS: DatabaseConfig[] = [
     icon: '🐘',
     driver: 'pg',
     typeorm: 'postgres',
-    port: 5432
+    port: 5432,
+    soon: false
   },
   {
     id: 2,
@@ -18,7 +19,8 @@ export const DATABASE_CONFIGS: DatabaseConfig[] = [
     icon: '🐬',
     driver: 'mysql',
     typeorm: 'mysql',
-    port: 3306
+    port: 3306,
+    soon: true
   },
   {
     id: 3,
@@ -27,7 +29,8 @@ export const DATABASE_CONFIGS: DatabaseConfig[] = [
     icon: '🏢',
     driver: 'mssql',
     typeorm: 'mssql',
-    port: 1433
+    port: 1433,
+    soon: true
   },
   {
     id: 4,
@@ -36,7 +39,8 @@ export const DATABASE_CONFIGS: DatabaseConfig[] = [
     icon: '🔶',
     driver: 'oracle',
     typeorm: 'oracle',
-    port: 1521
+    port: 1521,
+    soon: true
   },
   {
     id: 5,
@@ -45,24 +49,28 @@ export const DATABASE_CONFIGS: DatabaseConfig[] = [
     icon: '🍃',
     driver: 'mongodb',
     typeorm: 'mongodb',
-    port: 27017
+    port: 27017,
+    soon: true
   }
 ];
 
-export const FEATURE_DESCRIPTIONS = {
-  with_crud: 'Generate complete CRUD operations for all tables',
-  full_validations: 'Add comprehensive field validations (email, unique, required)',
-  with_ftp: 'Include FTP configuration and file handling utilities',
-  with_swagger: 'Generate Swagger/OpenAPI documentation',
-  with_google_auth: 'Add Google OAuth 2.0 authentication setup'
-};
-
-export const SQL_DIALECTS = {
-  POSTGRESQL: 'postgresql',
-  MYSQL: 'mysql',
-  MSSQL: 'mssql',
-  ORACLE: 'oracle'
-};
+export const FEATURES = [
+  { key: "with_entities" as const, label: "Entities & Schemas", desc: 'Generate all the tables with their relations', icon: "⛁", status: "✅", canEdit: false },
+  { key: "with_crud" as const, label: "CRUD Operations", desc: 'Generate complete CRUD operations for all tables', icon: "🔧", status: "✅", canEdit: false },
+  { key: "with_swagger" as const, label: "Swagger/OpenAPI Docs", desc: 'Generate Swagger/OpenAPI documentation', icon: "📚", status: "✅", canEdit: true },
+  {
+    key: "full_validations" as const,
+    label: "Field Validations",
+    desc: 'Add comprehensive field validations (email, unique, required, etc.)',
+    icon: "🔍",
+    status: "✅",
+    canEdit: true,
+  },
+  { key: "with_jwt_auth" as const, label: "JWT Auth", desc: 'Add JWT auth strategy', icon: "🔐", status: "Soon!", canEdit: true },
+  { key: "date_fields" as const, label: "Date Fields Columns", desc: 'Add "createdAt" & "updatedAt" fields or columns for all the tables', icon: "📆", status: "Soon!", canEdit: true },
+  { key: "with_ftp" as const, label: "FTP Support", desc: 'Include FTP configuration and file handling utilities', icon: "📁", status: "Soon!", canEdit: true },
+  { key: "with_google_auth" as const, label: "Google OAuth", desc: 'Add Google OAuth 2.0 authentication setup', icon: "🇬", status: "Soon!", canEdit: true },
+];
 
 export const TYPE_MAPPINGS = {
   postgresql: {

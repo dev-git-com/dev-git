@@ -1,7 +1,4 @@
-import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
-import { DrawerWrapper } from "@/shared/components/DrawerWrapper.component";
-import { Toaster } from "@/shared/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,12 +15,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <DrawerWrapper>{children}</DrawerWrapper>
-        <Toaster />
+    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Mozilla+Text:wght@200..700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen`}
+      >
+        {children}
       </body>
     </html>
   );

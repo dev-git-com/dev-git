@@ -14,7 +14,7 @@ export class CodeGenerator {
     projectName: string = 'generated-nestjs-app'
   ): Promise<Buffer> {
     const databaseConfig = DATABASE_CONFIGS.find(db => db.id === config.database_type)!;
-    
+
     const templateData: TemplateData = {
       projectName,
       tables: parsedSchema.tables,
@@ -31,14 +31,17 @@ export class CodeGenerator {
 
     // Generate entities and modules for each table
     for (const table of parsedSchema.tables) {
-      await this.generateTableFiles(zip, table, templateData);
+      this.generatedTables.push(table.name);
+      if(config.with_entities) await this.generateTableFiles(zip, table, templateData);
+      if(config.with_crud) await this.generateCRUDFiles(zip, table, templateData);
     }
 
     // Generate authentication module
-    await this.generateAuthModule(zip, templateData);
-
-    // Generate utility files
-    await this.generateUtilityFiles(zip, templateData);
+    if (config.with_jwt_auth) {
+      await this.generateAuthModule(zip, templateData);
+      // Generate utility files
+      await this.generateUtilityFiles(zip, templateData);
+    }
 
     // Generate configuration files
     await this.generateConfigFiles(zip, templateData);
@@ -124,32 +127,36 @@ export class CodeGenerator {
   }
 
   private async generateTableFiles(zip: JSZip, table: TableSchema, data: TemplateData): Promise<void> {
-    this.generatedTables.push(table.name);
-    const modulePath = `src/modules/${table.name}`;
+    const entitiesPath = `src/entities`;
 
     // Entity
-    zip.file(`${modulePath}/${table.name}.entity.ts`, 
+    zip.file(`${entitiesPath}/${table.name}.entity.ts`,
       this.templateGenerator.generateEntity(table, data));
+  }
+
+  private async generateCRUDFiles(zip: JSZip, table: TableSchema, data: TemplateData): Promise<void> {
+    const modulePath = `src/modules/${table.name}`;
 
     // Controller
-    zip.file(`${modulePath}/${table.name}.controller.ts`, 
+    zip.file(`${modulePath}/${table.name}.controller.ts`,
       this.templateGenerator.generateController(table, data));
 
     // Service
-    zip.file(`${modulePath}/${table.name}.service.ts`, 
+    zip.file(`${modulePath}/${table.name}.service.ts`,
       this.templateGenerator.generateService(table, data));
 
     // DTOs
-    zip.file(`${modulePath}/dto/create-${table.name}.dto.ts`, 
+    zip.file(`${modulePath}/dto/create-${table.name}.dto.ts`,
       this.templateGenerator.generateCreateDto(table, data));
-    
-    zip.file(`${modulePath}/dto/update-${table.name}.dto.ts`, 
+
+    zip.file(`${modulePath}/dto/update-${table.name}.dto.ts`,
       this.templateGenerator.generateUpdateDto(table, data));
 
     // Module
-    zip.file(`${modulePath}/${table.name}.module.ts`, 
+    zip.file(`${modulePath}/${table.name}.module.ts`,
       this.templateGenerator.generateModule(table, data));
   }
+
 
   private async generateAuthModule(zip: JSZip, data: TemplateData): Promise<void> {
     const authPath = 'src/modules/auth';
@@ -166,7 +173,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { ${usersSchemaName} } from '../${usersFilesName}/${usersFilesName}.entity';
+import { ${usersSchemaName} } from 'src/entities/${usersFilesName}.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -254,7 +261,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { ${usersSchemaName} } from '../${usersFilesName}/${usersFilesName}.entity';
+import { ${usersSchemaName} } from 'src/entities/${usersFilesName}.entity';
 import { JwtStrategy } from '../../strategies/jwt.strategy';
 
 @Module({
@@ -385,7 +392,7 @@ export const Roles = (...roles: string[]) => SetMetadata(ROLES_KEY, roles);`);
   ${data.userRoles.map(role => `${role.toUpperCase()} = '${role}'`).join(',\n  ')}
 }`);
 
-    // Utilities
+    // date.util
     zip.file('src/utils/date.util.ts', `export class DateUtil {
   static toUTC(date: Date): Date {
     return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
@@ -509,14 +516,14 @@ export const databaseConfig: TypeOrmModuleAsyncOptions = {
   useFactory: (configService: ConfigService) => ({
     type: '${data.databaseConfig.typeorm}' as any,
     host: configService.get<string>('DB_HOST'),
-    port: configService.get<number>('DB_PORT'),
+    port: +configService.get<number>('DB_PORT'),
     username: configService.get<string>('DB_USERNAME'),
     password: configService.get<string>('DB_PASSWORD'),
     database: configService.get<string>('DB_DATABASE'),
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     synchronize: configService.get<boolean>('DB_SYNCHRONIZE', false),
     logging: configService.get<boolean>('DB_LOGGING', false),
-    ${data.databaseConfig.name === 'postgresql' ? `ssl: configService.get<boolean>('DB_SSL', false) ? { rejectUnauthorized: false } : false,` : ''}
+    // ${data.databaseConfig.name === 'postgresql' ? `ssl: configService.get<boolean>('DB_SSL', false) ? { rejectUnauthorized: false } : false,` : ''}
     ${data.databaseConfig.name === 'mysql' ? `charset: 'utf8mb4',` : ''}
   }),
   inject: [ConfigService],

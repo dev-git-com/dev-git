@@ -1,0 +1,418 @@
+.tableSection {
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.tableContainer {
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  border-radius: 12px;
+  direction: ltr;
+}
+
+.tableHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--color-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0;
+}
+
+.tableWrapper {
+  background: var(--color-table-card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  overflow-x: auto;
+  border: 1px solid var(--color-dark);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.table thead th {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  padding: 16px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-dark);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tableRow {
+  border-bottom: 1px solid var(--color-dark);
+  transition: background-color 0.2s ease;
+}
+
+.tableRow:hover {
+  background: var(--color-dark);
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.table td {
+  padding: 16px 12px;
+  vertical-align: top;
+}
+
+.stageCell {
+  font-weight: 600;
+  color: var(--color-light);
+  min-width: 140px;
+  position: relative;
+}
+
+.devIcon {
+  color: var(--color-primary);
+  margin-right: 8px;
+}
+
+.testIcon {
+  color: var(--color-accent);
+  margin-right: 8px;
+}
+
+.stageName {
+  color: var(--color-light);
+}
+
+.activitiesCell {
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  max-width: 200px;
+}
+
+.costCell,
+.devGitCell {
+  font-weight: 500;
+  color: var(--color-light);
+  text-align: center;
+  min-width: 80px;
+}
+
+.timeSavedCell {
+  min-width: 120px;
+}
+
+.progressWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progressBar {
+  background: linear-gradient(45deg, var(--color-primary), var(--color-accent));
+  height: 8px;
+  width: 40px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.percentageText {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-light);
+  min-width: 35px;
+}
+
+.impactCell {
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  max-width: 180px;
+  font-size: 0.85rem;
+}
+
+.bottomSection {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.bottomTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-light);
+  margin-bottom: 24px;
+}
+
+.comparisonCards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.traditionCard,
+.devGitCard {
+  flex: 1;
+  max-width: 280px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.traditionCard {
+  background: var(--color-tradition-card-bg);
+  border: 1px solid var(--color-tradition-card-borde);
+}
+
+.traditionCard h4 {
+  color: var(--color-tradition-card-title);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.traditionCard p {
+  color: var(--color-tradition-card-text);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.devGitCard {
+  background: var(--color-devgit-card-bg);
+  border: 1px solid var(--color-primary);
+}
+
+.devGitCard h4 {
+  color: var(--color-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.devGitCard p {
+  color: var(--color-devgit-card-text);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.savingsHighlight {
+  color: var(--color-accent);
+  background: var(--color-dark);
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  padding: 16px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.mobileCardsContainer {
+  display: none;
+}
+
+.mobileCard {
+  background: var(--color-table-card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+  border-left: 4px solid var(--color-primary);
+  border: 1px solid var(--color-dark);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mobileCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.5);
+  border-color: var(--color-accent);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-dark);
+
+}
+
+.stageTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stageTitle h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-light);
+  margin: 0;
+}
+
+.timeSavedBadge .progressWrapper {
+  gap: 6px;
+}
+
+.timeSavedBadge .progressBar {
+  width: 30px;
+  height: 6px;
+  background: linear-gradient(45deg, var(--color-primary), var(--color-accent));
+}
+
+.timeSavedBadge .percentageText {
+  font-size: 0.75rem;
+  min-width: 30px;
+  color: var(--color-light);
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cardSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cardLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardValue {
+  font-size: 0.9rem;
+  color: var(--color-light);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.costComparison {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-dark);
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid var(--color-dark);
+}
+
+.costItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.costLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.costValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-light);
+  text-align: center;
+}
+
+.costArrow {
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  font-weight: bold;
+  margin: 0 8px;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tableContainer {
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 880px) {
+  .tableSection {
+    padding: 0;
+  }
+
+  .tableContainer {
+    padding: 0;
+    width: 90%;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .tableWrapper {
+    display: none;
+  }
+
+  .mobileCardsContainer {
+    display: block;
+  }
+
+  .comparisonCards {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .traditionCard,
+  .devGitCard {
+    max-width: none;
+    padding: 16px;
+  }
+
+  .savingsHighlight {
+    font-size: 1rem;
+    padding: 14px 20px;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.3rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .table {
+    min-width: 600px;
+  }
+
+  .table thead th {
+    padding: 10px 6px;
+    font-size: 0.7rem;
+  }
+
+  .table td {
+    padding: 10px 6px;
+  }
+
+  .bottomTitle {
+    font-size: 1.3rem;
+  }
+}

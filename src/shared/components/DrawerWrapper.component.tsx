@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import { EnumLocalStorage } from "@/shared/constants/LocalStorage.constants";
 import { MiniDrawer } from "./MiniDrawer.component";
-import logo from "../../assets/images/logo/logo.png";
-import Image from "next/image";
+import { Menu } from "lucide-react";
 
 export const DrawerWrapper = ({ children }: { children: React.ReactNode }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -41,7 +40,7 @@ export const DrawerWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <main
       className={`${
-        isDrawerOpen && !isTablet ? "ml-72" : isMobile ? "ml-0" : "ml-24"
+        isDrawerOpen && !isTablet ? "ml-[256px]" : isMobile ? "ml-0" : "ml-20"
       } duration-300`}
     >
       {isMobile && !isDrawerOpen ? (
@@ -53,11 +52,7 @@ export const DrawerWrapper = ({ children }: { children: React.ReactNode }) => {
               setIsDrawerOpen(!isDrawerOpen);
             }}
           >
-            <Image
-              alt="logo"
-              src={logo}
-              className="self-center justify-center w-14 h-w-14"
-            />
+            <Menu />
             {isDrawerOpen && (
               <span className="inline-flex">
                 <p className="text-blue-400">Dev</p>-

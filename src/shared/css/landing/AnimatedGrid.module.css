@@ -1,0 +1,947 @@
+@keyframes expandWidth {
+    0% {
+        width: 0%;
+        opacity: 0;
+    }
+
+    15% {
+        width: 96%;
+        opacity: 0.3;
+    }
+
+    85% {
+        width: 96%;
+        opacity: 0.3;
+    }
+
+    100% {
+        width: 0%;
+        opacity: 0;
+    }
+}
+
+@keyframes expandWidthSlow {
+    0% {
+        width: 0%;
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    20% {
+        width: 96%;
+        opacity: 0.4;
+        transform: translateX(0);
+    }
+
+    80% {
+        width: 96%;
+        opacity: 0.4;
+        transform: translateX(0);
+    }
+
+    100% {
+        width: 0%;
+        opacity: 0;
+        transform: translateX(10px);
+    }
+}
+
+@keyframes expandWidthFast {
+    0% {
+        width: 0%;
+        opacity: 0;
+    }
+
+    10% {
+        width: 96%;
+        opacity: 0.5;
+    }
+
+    90% {
+        width: 96%;
+        opacity: 0.5;
+    }
+
+    100% {
+        width: 0%;
+        opacity: 0;
+    }
+}
+
+@keyframes expandWidthReverse {
+    0% {
+        width: 96%;
+        opacity: 0;
+        left: 4%;
+    }
+
+    15% {
+        width: 0%;
+        opacity: 0.4;
+        left: 2%;
+    }
+
+    85% {
+        width: 0%;
+        opacity: 0.4;
+        left: 2%;
+    }
+
+    100% {
+        width: 96%;
+        opacity: 0;
+        left: 4%;
+    }
+}
+
+@keyframes expandWidthWave {
+    0% {
+        width: 0%;
+        opacity: 0;
+        transform: scaleY(1);
+    }
+
+    25% {
+        width: 48%;
+        opacity: 0.3;
+        transform: scaleY(1.5);
+    }
+
+    50% {
+        width: 96%;
+        opacity: 0.5;
+        transform: scaleY(1);
+    }
+
+    75% {
+        width: 48%;
+        opacity: 0.3;
+        transform: scaleY(0.8);
+    }
+
+    100% {
+        width: 0%;
+        opacity: 0;
+        transform: scaleY(1);
+    }
+}
+
+@keyframes expandWidthPulse {
+    0% {
+        width: 0%;
+        opacity: 0;
+        filter: blur(0px);
+    }
+
+    20% {
+        width: 96%;
+        opacity: 0.6;
+        filter: blur(1px);
+    }
+
+    40% {
+        width: 96%;
+        opacity: 0.3;
+        filter: blur(2px);
+    }
+
+    60% {
+        width: 96%;
+        opacity: 0.6;
+        filter: blur(1px);
+    }
+
+    80% {
+        width: 96%;
+        opacity: 0.3;
+        filter: blur(2px);
+    }
+
+    100% {
+        width: 0%;
+        opacity: 0;
+        filter: blur(0px);
+    }
+}
+
+@keyframes expandWidthBounce {
+    0% {
+        width: 0%;
+        opacity: 0;
+        transform: translateY(0);
+    }
+
+    15% {
+        width: 77%;
+        opacity: 0.4;
+        transform: translateY(-2px);
+    }
+
+    30% {
+        width: 96%;
+        opacity: 0.6;
+        transform: translateY(0);
+    }
+
+    45% {
+        width: 86%;
+        opacity: 0.5;
+        transform: translateY(-1px);
+    }
+
+    60% {
+        width: 96%;
+        opacity: 0.6;
+        transform: translateY(0);
+    }
+
+    100% {
+        width: 0%;
+        opacity: 0;
+        transform: translateY(0);
+    }
+}
+
+@keyframes expandWidthGlow {
+    0% {
+        width: 0%;
+        opacity: 0;
+        box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+    }
+
+    25% {
+        width: 96%;
+        opacity: 0.2;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    50% {
+        width: 96%;
+        opacity: 0.4;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    75% {
+        width: 96%;
+        opacity: 0.2;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    100% {
+        width: 0%;
+        opacity: 0;
+        box-shadow: 0 0 0px rgba(255, 255, 255, 0);
+    }
+}
+
+@keyframes expandHeight {
+    0% {
+        height: 0%;
+        opacity: 0;
+    }
+
+    15% {
+        height: 100%;
+        opacity: 0.3;
+    }
+
+    85% {
+        height: 100%;
+        opacity: 0.3;
+    }
+
+    100% {
+        height: 0%;
+        opacity: 0;
+    }
+}
+
+@keyframes expandHeightPulse {
+    0% {
+        height: 0%;
+        opacity: 0;
+        transform: scaleX(1);
+    }
+
+    20% {
+        height: 100%;
+        opacity: 0.4;
+        transform: scaleX(1.5);
+    }
+
+    40% {
+        height: 100%;
+        opacity: 0.2;
+        transform: scaleX(1);
+    }
+
+    60% {
+        height: 100%;
+        opacity: 0.4;
+        transform: scaleX(1.5);
+    }
+
+    80% {
+        height: 100%;
+        opacity: 0.2;
+        transform: scaleX(1);
+    }
+
+    100% {
+        height: 0%;
+        opacity: 0;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes expandHeightFast {
+    0% {
+        height: 0%;
+        opacity: 0;
+    }
+
+    8% {
+        height: 100%;
+        opacity: 0.6;
+    }
+
+    92% {
+        height: 100%;
+        opacity: 0.6;
+    }
+
+    100% {
+        height: 0%;
+        opacity: 0;
+    }
+}
+
+@keyframes expandHeightSlow {
+    0% {
+        height: 0%;
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    25% {
+        height: 100%;
+        opacity: 0.3;
+        transform: translateY(0);
+    }
+
+    75% {
+        height: 100%;
+        opacity: 0.3;
+        transform: translateY(0);
+    }
+
+    100% {
+        height: 0%;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+@keyframes expandDiagonal {
+    0% {
+        height: 0%;
+        opacity: 0;
+        transform: rotate(45deg) scale(1);
+    }
+
+    20% {
+        height: 100%;
+        opacity: 0.3;
+        transform: rotate(45deg) scale(1);
+    }
+
+    80% {
+        height: 100%;
+        opacity: 0.3;
+        transform: rotate(45deg) scale(1);
+    }
+
+    100% {
+        height: 0%;
+        opacity: 0;
+        transform: rotate(45deg) scale(1);
+    }
+}
+
+@keyframes expandDiagonalSlow {
+    0% {
+        height: 0%;
+        opacity: 0;
+        transform: rotate(45deg) scale(0.8);
+    }
+
+    30% {
+        height: 100%;
+        opacity: 0.4;
+        transform: rotate(45deg) scale(1.1);
+    }
+
+    70% {
+        height: 100%;
+        opacity: 0.4;
+        transform: rotate(45deg) scale(1.1);
+    }
+
+    100% {
+        height: 0%;
+        opacity: 0;
+        transform: rotate(45deg) scale(0.8);
+    }
+}
+
+@keyframes expandDiagonalReverse {
+    0% {
+        height: 0%;
+        opacity: 0;
+        transform: rotate(-45deg) scale(1);
+    }
+
+    20% {
+        height: 100%;
+        opacity: 0.3;
+        transform: rotate(-45deg) scale(1);
+    }
+
+    80% {
+        height: 100%;
+        opacity: 0.3;
+        transform: rotate(-45deg) scale(1);
+    }
+
+    100% {
+        height: 0%;
+        opacity: 0;
+        transform: rotate(-45deg) scale(1);
+    }
+}
+
+@keyframes expandDiagonalReverseSlow {
+    0% {
+        height: 0%;
+        opacity: 0;
+        transform: rotate(-45deg) scale(0.9);
+    }
+
+    25% {
+        height: 100%;
+        opacity: 0.5;
+        transform: rotate(-45deg) scale(1.2);
+    }
+
+    75% {
+        height: 100%;
+        opacity: 0.5;
+        transform: rotate(-45deg) scale(1.2);
+    }
+
+    100% {
+        height: 0%;
+        opacity: 0;
+        transform: rotate(-45deg) scale(0.9);
+    }
+}
+
+.backgroundContainer {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+
+}
+
+
+.animatedLines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.gridLine {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.89);
+    transform-origin: left center;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.gridLine::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: rgba(255, 255, 255, 0.1);
+    filter: blur(4px);
+    z-index: -1;
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+}
+
+.gridLineHorizontal {
+    height: 1px;
+    width: 0%;
+    left: 2%;
+    animation: expandWidth 8s ease-in-out infinite;
+    -webkit-mask-image: linear-gradient(to right, transparent 10%, white 50%, transparent 90%);
+    mask-image: linear-gradient(to right, transparent 10%, white 50%, transparent 90%);
+}
+
+.horizontal1 {
+    top: 8%;
+    animation-delay: 0s;
+}
+
+.horizontal2 {
+    top: 22%;
+    animation-delay: 0.4s;
+}
+
+.horizontal3 {
+    top: 36%;
+    animation-delay: 0.8s;
+}
+
+.horizontal4 {
+    top: 50%;
+    animation-delay: 1.2s;
+}
+
+.horizontal5 {
+    top: 64%;
+    animation-delay: 1.6s;
+}
+
+.horizontal6 {
+    top: 78%;
+    animation-delay: 2s;
+}
+
+.horizontal7 {
+    top: 92%;
+    animation-delay: 2.4s;
+}
+
+.gridLineVertical {
+    width: 1px;
+    height: 0%;
+    top: 0%;
+    animation: expandHeight 8s ease-in-out infinite;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 10%, white 50%, transparent 90%);
+    mask-image: linear-gradient(to bottom, transparent 10%, white 50%, transparent 90%);
+}
+
+.vertical1 {
+    left: 15%;
+    animation-delay: 0.3s;
+}
+
+.vertical2 {
+    left: 45%;
+    animation-delay: 0.8s;
+}
+
+.vertical3 {
+    left: 75%;
+    animation-delay: 1.3s;
+}
+
+.gridLineDiagonal {
+    width: 1px;
+    height: 0%;
+    top: 0%;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+    transform-origin: top center;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 10%, white 50%, transparent 90%);
+    mask-image: linear-gradient(to bottom, transparent 10%, white 50%, transparent 90%);
+}
+
+.diagonal1 {
+    left: 25%;
+    animation: expandDiagonal 8s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.diagonal2 {
+    left: 65%;
+    animation: expandDiagonalReverse 8s ease-in-out infinite;
+    animation-delay: 2.5s;
+}
+
+
+.scrollLevel1 .horizontal1 {
+    top: 5%;
+    animation: expandWidthSlow 10s ease-in-out infinite;
+    animation-delay: 0.5s;
+    opacity: 0.9;
+}
+
+.scrollLevel1 .horizontal3 {
+    top: 42%;
+    animation: expandWidthFast 6s ease-in-out infinite;
+    animation-delay: 1.5s;
+    opacity: 0.7;
+}
+
+.scrollLevel1 .vertical2 {
+    left: 35%;
+    animation: expandHeightPulse 7s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.scrollLevel2 .horizontal1 {
+    top: 5%;
+    animation: expandWidthSlow 10s ease-in-out infinite;
+    animation-delay: 0.5s;
+    opacity: 0.9;
+}
+
+.scrollLevel2 .horizontal3 {
+    top: 42%;
+    animation: expandWidthFast 6s ease-in-out infinite;
+    animation-delay: 1.5s;
+    opacity: 0.7;
+}
+
+.scrollLevel2 .horizontal5 {
+    top: 70%;
+    animation: expandWidthReverse 9s ease-in-out infinite;
+    animation-delay: 0.8s;
+    opacity: 0.8;
+}
+
+.scrollLevel2 .vertical2 {
+    left: 35%;
+    animation: expandHeightPulse 7s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.scrollLevel2 .diagonal1 {
+    left: 25%;
+    animation: expandDiagonalSlow 12s ease-in-out infinite;
+    animation-delay: 3s;
+    opacity: 0.6;
+}
+
+.scrollLevel3 .horizontal1 {
+    top: 5%;
+    animation: expandWidthSlow 10s ease-in-out infinite;
+    animation-delay: 0.5s;
+    opacity: 0.9;
+}
+
+.scrollLevel3 .horizontal3 {
+    top: 42%;
+    animation: expandWidthFast 6s ease-in-out infinite;
+    animation-delay: 1.5s;
+    opacity: 0.7;
+}
+
+.scrollLevel3 .horizontal5 {
+    top: 70%;
+    animation: expandWidthReverse 9s ease-in-out infinite;
+    animation-delay: 0.8s;
+    opacity: 0.8;
+}
+
+.scrollLevel3 .horizontal2 {
+    top: 18%;
+    animation: expandWidthWave 11s ease-in-out infinite;
+    animation-delay: 2.2s;
+    opacity: 0.5;
+}
+
+.scrollLevel3 .vertical2 {
+    left: 35%;
+    animation: expandHeightPulse 7s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.scrollLevel3 .vertical1 {
+    left: 18%;
+    animation: expandHeightFast 5s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.scrollLevel3 .vertical3 {
+    left: 85%;
+    animation: expandHeightSlow 13s ease-in-out infinite;
+    animation-delay: 3.5s;
+}
+
+.scrollLevel3 .diagonal1 {
+    left: 25%;
+    animation: expandDiagonalSlow 12s ease-in-out infinite;
+    animation-delay: 3s;
+    opacity: 0.6;
+}
+
+.scrollLevel4 .horizontal1 {
+    top: 5%;
+    animation: expandWidthSlow 10s ease-in-out infinite;
+    animation-delay: 0.5s;
+    opacity: 0.9;
+}
+
+.scrollLevel4 .horizontal3 {
+    top: 42%;
+    animation: expandWidthFast 6s ease-in-out infinite;
+    animation-delay: 1.5s;
+    opacity: 0.7;
+}
+
+.scrollLevel4 .horizontal5 {
+    top: 70%;
+    animation: expandWidthReverse 9s ease-in-out infinite;
+    animation-delay: 0.8s;
+    opacity: 0.8;
+}
+
+.scrollLevel4 .horizontal2 {
+    top: 18%;
+    animation: expandWidthWave 11s ease-in-out infinite;
+    animation-delay: 2.2s;
+    opacity: 0.5;
+}
+
+.scrollLevel4 .horizontal6 {
+    top: 85%;
+    animation: expandWidthPulse 8s ease-in-out infinite;
+    animation-delay: 1.8s;
+    opacity: 0.4;
+}
+
+.scrollLevel4 .vertical2 {
+    left: 35%;
+    animation: expandHeightPulse 7s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.scrollLevel4 .vertical1 {
+    left: 18%;
+    animation: expandHeightFast 5s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.scrollLevel4 .vertical3 {
+    left: 85%;
+    animation: expandHeightSlow 13s ease-in-out infinite;
+    animation-delay: 3.5s;
+}
+
+.scrollLevel4 .diagonal1 {
+    left: 25%;
+    animation: expandDiagonalSlow 12s ease-in-out infinite;
+    animation-delay: 3s;
+    opacity: 0.6;
+}
+
+.scrollLevel4 .diagonal2 {
+    left: 75%;
+    animation: expandDiagonalReverseSlow 14s ease-in-out infinite;
+    animation-delay: 4s;
+    opacity: 0.7;
+}
+
+.scrollLevel5 .horizontal1 {
+    top: 5%;
+    animation: expandWidthSlow 10s ease-in-out infinite;
+    animation-delay: 0.5s;
+    opacity: 0.9;
+}
+
+.scrollLevel5 .horizontal3 {
+    top: 42%;
+    animation: expandWidthFast 6s ease-in-out infinite;
+    animation-delay: 1.5s;
+    opacity: 0.7;
+}
+
+.scrollLevel5 .horizontal5 {
+    top: 70%;
+    animation: expandWidthReverse 9s ease-in-out infinite;
+    animation-delay: 0.8s;
+    opacity: 0.8;
+}
+
+.scrollLevel5 .horizontal2 {
+    top: 18%;
+    animation: expandWidthWave 11s ease-in-out infinite;
+    animation-delay: 2.2s;
+    opacity: 0.5;
+}
+
+.scrollLevel5 .horizontal6 {
+    top: 85%;
+    animation: expandWidthPulse 8s ease-in-out infinite;
+    animation-delay: 1.8s;
+    opacity: 0.4;
+}
+
+.scrollLevel5 .horizontal4 {
+    top: 55%;
+    animation: expandWidthBounce 7s ease-in-out infinite;
+    animation-delay: 3.2s;
+    opacity: 0.6;
+}
+
+.scrollLevel5 .horizontal7 {
+    top: 95%;
+    animation: expandWidthGlow 15s ease-in-out infinite;
+    animation-delay: 4.5s;
+    opacity: 0.3;
+}
+
+.scrollLevel5 .vertical2 {
+    left: 35%;
+    animation: expandHeightPulse 7s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.scrollLevel5 .vertical1 {
+    left: 18%;
+    animation: expandHeightFast 5s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.scrollLevel5 .vertical3 {
+    left: 85%;
+    animation: expandHeightSlow 13s ease-in-out infinite;
+    animation-delay: 3.5s;
+}
+
+.scrollLevel5 .diagonal1 {
+    left: 25%;
+    animation: expandDiagonalSlow 12s ease-in-out infinite;
+    animation-delay: 3s;
+    opacity: 0.6;
+}
+
+.scrollLevel5 .diagonal2 {
+    left: 75%;
+    animation: expandDiagonalReverseSlow 14s ease-in-out infinite;
+    animation-delay: 4s;
+    opacity: 0.7;
+}
+
+.newHorizontalLine {
+    height: 1px;
+    width: 0%;
+    left: 2%;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    animation: expandWidthSlow 12s ease-in-out infinite;
+    -webkit-mask-image: linear-gradient(to right, transparent 15%, white 50%, transparent 85%);
+    mask-image: linear-gradient(to right, transparent 15%, white 50%, transparent 85%);
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+.newVerticalLine {
+    width: 1px;
+    height: 0%;
+    top: 0%;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    animation: expandHeightPulse 10s ease-in-out infinite;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 15%, white 50%, transparent 85%);
+    mask-image: linear-gradient(to bottom, transparent 15%, white 50%, transparent 85%);
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+.scrollLevel3 .newHorizontalLine {
+    top: 28%;
+    animation-delay: 5s;
+    opacity: 0.4;
+}
+
+.scrollLevel4 .newHorizontalLine {
+    top: 28%;
+    animation-delay: 5s;
+    opacity: 0.4;
+}
+
+.scrollLevel4 .newVerticalLine {
+    left: 65%;
+    animation-delay: 6s;
+    opacity: 0.5;
+}
+
+.scrollLevel5 .newHorizontalLine {
+    top: 28%;
+    animation-delay: 5s;
+    opacity: 0.4;
+}
+
+.scrollLevel5 .newVerticalLine {
+    left: 65%;
+    animation-delay: 6s;
+    opacity: 0.5;
+}
+
+@media (max-width: 700px) {
+    .backgroundContainer {
+        min-height: 0vh;
+
+    }
+
+    @keyframes expandWidth {
+        0% {
+            width: 0%;
+            opacity: 0;
+        }
+
+        15% {
+            width: 94%;
+            opacity: 0.3;
+        }
+
+        85% {
+            width: 94%;
+            opacity: 0.3;
+        }
+
+        100% {
+            width: 0%;
+            opacity: 0;
+        }
+    }
+
+    .gridLineHorizontal {
+        left: 3%;
+    }
+
+    .newHorizontalLine {
+        left: 3%;
+    }
+
+    .horizontal1,
+    .horizontal2,
+    .horizontal3,
+    .horizontal4 {
+        -webkit-mask-image: linear-gradient(to right, transparent 5%, white 50%, transparent 95%);
+        mask-image: linear-gradient(to right, transparent 5%, white 50%, transparent 95%);
+    }
+
+    .vertical1,
+    .vertical2,
+    .vertical3 {
+        -webkit-mask-image: linear-gradient(to bottom, transparent 5%, white 50%, transparent 95%);
+        mask-image: linear-gradient(to bottom, transparent 5%, white 50%, transparent 95%);
+    }
+}

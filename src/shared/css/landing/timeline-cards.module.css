@@ -1,0 +1,273 @@
+/* Main container */
+.timelineContainer {
+  color: var(--color-light);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 120px auto;
+}
+
+/* Header section */
+.headerSection {
+  margin: 0 auto 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.headerContent {
+  flex: 1;
+  min-width: 300px;
+}
+
+.mainTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
+/* Avatars with overlap effect */
+.avatarsContainer {
+  display: flex;
+  gap: -8px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--color-dark);
+  overflow: hidden;
+  margin-left: -8px;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.avatar:first-child {
+  margin-left: 0;
+}
+
+.avatar:hover {
+  transform: translateY(-2px);
+  z-index: 100 !important;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Progress section */
+.progressSection {
+  min-width: 200px;
+  text-align: right;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-progress-fill-start), var(--color-progress-fill-end));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.versionText {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.percentageText {
+  font-weight: 700;
+  color: var(--color-progress-fill-end);
+}
+
+.monthText {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Cards section */
+.cardsSection {
+  position: relative;
+  width: 100%;
+}
+
+.cardsSwiper {
+  padding: 0 20px;
+}
+
+.swiper-slide {
+  width: 40% !important;
+}
+
+.cardSlide {
+  max-width: 350px;
+  margin: -6px;
+}
+
+.card {
+  background: var(--color-dark);
+  border-radius: 7px;
+  padding: 8px;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  max-width: 330px;
+}
+
+.card:hover {
+  transform: translateY(4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.cardItems {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cardItem {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.546);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  background-color: var(--color-timeline-card-bg);
+}
+
+.cardItem:hover {
+  transform: translateX(4px);
+}
+
+.itemContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemContent p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.itemType {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
+
+/* Gradient masks */
+.gradientMaskLeft,
+.gradientMaskRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  pointer-events: none;
+  z-index: 10;
+  border-radius: 8px;
+}
+
+.gradientMaskLeft {
+  left: 0;
+  background: linear-gradient(90deg, var(--color-light-transparent) -200%, transparent 70%);
+}
+
+.gradientMaskRight {
+  right: 0;
+  background: linear-gradient(270deg, var(--color-light-transparent) -200%, transparent 70%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .headerSection {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .progressSection {
+    text-align: center;
+    width: 100%;
+  }
+
+  .mainTitle {
+    font-size: 2rem;
+  }
+
+  .cardSlide {
+    width: 280px;
+    margin: 5px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .avatarsContainer {
+    justify-content: center;
+  }
+
+  .headerContent {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .timelineContainer {
+    padding: 20px 10px;
+  }
+
+  .mainTitle {
+    font-size: 1.8rem;
+  }
+
+  .cardSlide {
+    width: 260px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .gradientMaskLeft,
+  .gradientMaskRight {
+    width: 5px;
+  }
+}

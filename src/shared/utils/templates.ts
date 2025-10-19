@@ -3,6 +3,9 @@ import { DATABASE_CONFIGS } from "./constants";
 import { PackageJsonBuilder } from "./package-json-builder";
 import { MainTsBuilder } from "./main-ts-builder";
 import { AppModuleBuilder } from "./app-module-builder";
+import { EntityBuilder } from "./entity-builder";
+import { EntityColumnBuilder } from "./entity-column-builder";
+import { RelationshipPropertyBuilder } from "./relationship-property-builder";
 
 export class TemplateGenerator {
   generatePackageJson(data: TemplateData): string {
@@ -137,7 +140,7 @@ export class TemplateGenerator {
   generateMainTs(data: TemplateData): string {
     const builder = new MainTsBuilder();
 
-    // Configuration de base
+    // Basic configuration
     builder
       .addSetupCode("// Enable CORS")
       .addSetupCode("app.enableCors();")
@@ -150,13 +153,13 @@ export class TemplateGenerator {
     }),
   );`);
 
-    // Configuration Swagger conditionnelle
+    // Conditional Swagger configuration
     if (data.config.with_swagger) {
       builder.enableSwagger({
         title: `${data.projectName} API`,
         description: "Generated API documentation",
         version: "1.0",
-        path: "api/docs"
+        path: "api/docs",
       });
     }
 
@@ -166,18 +169,16 @@ export class TemplateGenerator {
   generateAppModule(data: TemplateData): string {
     const builder = new AppModuleBuilder();
 
-    // Configuration de base
-    builder
-      .enableGlobalConfig('.env')
-      .enableDatabaseConfig();
+    // Basic configuration
+    builder.enableGlobalConfig(".env").enableDatabaseConfig();
 
-    // Ajout du module d'authentification si nécessaire
+    // Add authentication module if needed
     if (data.config.with_jwt_auth) {
       builder.enableAuthModule();
     }
 
-    // Ajout des modules pour chaque table
-    data.tables.forEach(table => {
+    // Add modules for each table
+    data.tables.forEach((table) => {
       builder.addFeatureModuleImport(
         this.capitalize(table.name),
         `./modules/${table.name}/${table.name}.module`
@@ -188,140 +189,58 @@ export class TemplateGenerator {
   }
 
   generateEntity(table: TableSchema, data: TemplateData): string {
-    return `import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-${
-  data.config.full_validations
-    ? "import { IsEmail, IsNotEmpty, IsOptional, IsString, IsNumber, IsBoolean, IsDate } from 'class-validator';"
-    : ""
-}
-${
-  data.config.with_swagger
-    ? "import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';"
-    : ""
-}
-${table.foreignKeys
-  .map(
-    (fk) =>
-      `import { ${this.capitalize(fk.referencesTable)} } from 'src/entities/${
-        fk.referencesTable
-      }.entity';`
-  )
-  .join("\n")}
+    const builder = new EntityBuilder().setBasicInfo(
+      table.name,
+      this.capitalize(table.name)
+    );
 
-@Entity('${table.name}')
-export class ${this.capitalize(table.name)} {
-${table.columns.map((col) => this.generateEntityColumn(col, data)).join("\n\n")}
+    // Configure options based on configuration
+    if (data.config.full_validations) {
+      builder.enableValidations();
+    }
+    if (data.config.with_swagger) {
+      builder.enableSwagger();
+    }
+    if (data.config.date_fields) {
+      builder.enableDateFields();
+    }
 
-${table.foreignKeys
-  .map((fk) => this.generateRelationshipProperty(fk, data))
-  .join("\n\n")}
+    // Add columns
+    table.columns.forEach((column) => {
+      builder.addColumn(column);
+    });
 
-${
-  data.config.date_fields
-    ? `
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  ${data.config.with_swagger ? "@ApiProperty()" : ""}
-  createdAt: Date;
+    // Add foreign keys
+    table.foreignKeys.forEach((fk) => {
+      builder.addForeignKey(fk);
+    });
 
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
-  ${data.config.with_swagger ? "@ApiProperty()" : ""}
-  updatedAt: Date;
-`
-    : ""
-}
-}`;
+    return builder.build();
   }
 
   generateEntityColumn(column: TableColumn, data: TemplateData): string {
-    const decorators = [];
+    const builder = new EntityColumnBuilder()
+      .setColumn(column)
+      .setDatabaseType(data.databaseConfig.driver);
 
-    // TypeORM decorators
-    if (column.primary) {
-      if (column.autoIncrement) {
-        decorators.push("@PrimaryGeneratedColumn()");
-      } else {
-        decorators.push("@Column({ primary: true })");
-      }
-    } else {
-      const columnOptions = [];
-      if (column.length) columnOptions.push(`length: ${column.length}`);
-      if (!column.nullable) columnOptions.push("nullable: false");
-      else columnOptions.push("nullable: true");
-      if (column.unique) columnOptions.push("unique: true");
-      if ((column.defaultValue ?? "").toLowerCase().includes("time"))
-        columnOptions.push("type: 'timestamp'");
-      if (column.defaultValue)
-        columnOptions.push(
-          `default: ${
-            column.defaultValue.toLowerCase().includes("time") ? "() => " : ""
-          }'${column.defaultValue}'`
-        );
-      //! Change this and make it dynamic
-      if (
-        column.type === "object" &&
-        (data.databaseConfig.driver.includes("postgre") ||
-          data.databaseConfig.driver === "pg")
-      )
-        columnOptions.push(`type: 'jsonb'`);
-
-      const optionsStr =
-        columnOptions.length > 0 ? `{ ${columnOptions.join(", ")} }` : "";
-      decorators.push(`@Column(${optionsStr})`);
-    }
-
-    // Validation decorators
     if (data.config.full_validations) {
-      if (!column.nullable) {
-        decorators.push("@IsNotEmpty()");
-      } else {
-        decorators.push("@IsOptional()");
-      }
-
-      if (column.name.toLowerCase().includes("email")) {
-        decorators.push("@IsEmail()");
-      }
-
-      switch (column.type) {
-        case "string":
-          decorators.push("@IsString()");
-          break;
-        case "number":
-          decorators.push("@IsNumber()");
-          break;
-        case "boolean":
-          decorators.push("@IsBoolean()");
-          break;
-        case "Date":
-          decorators.push("@IsDate()");
-          break;
-      }
+      builder.enableValidations();
     }
-
-    // Swagger decorators
     if (data.config.with_swagger) {
-      const swaggerDecorator = column.nullable
-        ? "@ApiPropertyOptional()"
-        : "@ApiProperty()";
-      decorators.push(swaggerDecorator);
+      builder.enableSwagger();
     }
 
-    const typeAnnotation = column.type === "Date" ? "Date" : column.type;
-
-    return `  ${decorators.join("\n  ")}
-  ${column.name}: ${typeAnnotation};`;
+    return builder.build();
   }
 
   generateRelationshipProperty(fk: any, data: TemplateData): string {
-    const decorators = [];
-    decorators.push(`@ManyToOne(() => ${this.capitalize(fk.referencesTable)})`);
-    decorators.push(`@JoinColumn({ name: '${fk.column}' })`);
+    const builder = new RelationshipPropertyBuilder().setForeignKey(fk);
 
     if (data.config.with_swagger) {
-      decorators.push("@ApiPropertyOptional()");
+      builder.enableSwagger();
     }
 
-    return `  ${decorators.join("\n  ")}
-  ${fk.referencesTable}: ${this.capitalize(fk.referencesTable)};`;
+    return builder.build();
   }
 
   generateController(table: TableSchema, data: TemplateData): string {

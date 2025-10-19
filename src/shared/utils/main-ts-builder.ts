@@ -10,7 +10,7 @@ export class MainTsBuilder {
   private port: number = 3000;
 
   constructor() {
-    // Ajout des imports de base
+    // Add base imports
     this.addImport("NestFactory", "@nestjs/core");
     this.addImport("ValidationPipe", "@nestjs/common");
     this.addImport("AppModule", "./app.module");
@@ -70,7 +70,11 @@ export class MainTsBuilder {
       try {
         await app.listen(port);
         console.log(\`🚀 Server running on http://localhost:\${port}\`);
-        ${this.swaggerConfig ? `console.log(\`Swagger docs available at: http://localhost:\${port}/${this.swaggerConfig.path}\`);` : ""}
+        ${
+          this.swaggerConfig
+            ? `console.log(\`Swagger docs available at: http://localhost:\${port}/${this.swaggerConfig.path}\`);`
+            : ""
+        }
         break; // success, exit loop
       } catch (err) {
         if (err.code === 'EADDRINUSE') {

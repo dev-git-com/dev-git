@@ -1,6 +1,7 @@
 import { TemplateData, TableSchema, TableColumn } from "./types";
 import { DATABASE_CONFIGS } from "./constants";
 import { PackageJsonBuilder } from "./package-json-builder";
+import { MainTsBuilder } from "./main-ts-builder";
 
 export class TemplateGenerator {
   generatePackageJson(data: TemplateData): string {
@@ -133,72 +134,32 @@ export class TemplateGenerator {
   }
 
   generateMainTs(data: TemplateData): string {
-    return `import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-${
-  data.config.with_swagger
-    ? "import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';"
-    : ""
-}
-import { AppModule } from './app.module';
+    const builder = new MainTsBuilder();
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  
-  // Enable CORS
-  app.enableCors();
-  
-  // Global validation pipe
-  app.useGlobalPipes(
+    // Configuration de base
+    builder
+      .addSetupCode("// Enable CORS")
+      .addSetupCode("app.enableCors();")
+      .addSetupCode("\n  // Global validation pipe")
+      .addSetupCode(`app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
       whitelist: true,
       forbidNonWhitelisted: true,
     }),
-  );
+  );`);
 
-  ${
-    data.config.with_swagger
-      ? `
-  // Swagger setup
-  const config = new DocumentBuilder()
-    .setTitle('${data.projectName} API')
-    .setDescription('Generated API documentation')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
-  `
-      : ""
-  }
-  let port = Number(process.env.PORT) || 3000;
-  async function startServer() {
-    while (true) {
-      try {
-        await app.listen(port);
-        console.log(\`🚀 Server running on http://localhost:\${port}\`);
-        ${
-          data.config.with_swagger
-            ? `console.log(\`Swagger docs available at: http://localhost:\${port}/api/docs\`);`
-            : ""
-        }
-        break; // success, exit loop
-      } catch (err) {
-        if (err.code === 'EADDRINUSE') {
-          console.warn(\`⚠️ Port \${port} in use, trying \${port + 1}...\`);
-          port++;
-        } else {
-          console.error('Unexpected error:', err);
-          process.exit(1);
-        }
-      }
+    // Configuration Swagger conditionnelle
+    if (data.config.with_swagger) {
+      builder.enableSwagger({
+        title: `${data.projectName} API`,
+        description: "Generated API documentation",
+        version: "1.0",
+        path: "api/docs"
+      });
     }
-  }
 
-  startServer();
-}
-bootstrap();`;
+    return builder.build();
   }
 
   generateAppModule(data: TemplateData): string {

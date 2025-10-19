@@ -6,6 +6,7 @@ import { AppModuleBuilder } from "./app-module-builder";
 import { EntityBuilder } from "./entity-builder";
 import { EntityColumnBuilder } from "./entity-column-builder";
 import { RelationshipPropertyBuilder } from "./relationship-property-builder";
+import { ControllerBuilder } from "./controller-builder";
 
 export class TemplateGenerator {
   generatePackageJson(data: TemplateData): string {
@@ -244,181 +245,12 @@ export class TemplateGenerator {
   }
 
   generateController(table: TableSchema, data: TemplateData): string {
-    const entityName = this.capitalize(table.name);
+    const builder = new ControllerBuilder()
+      .setBasicInfo(table.name, this.capitalize(table.name))
+      .withSwagger(data.config.with_swagger)
+      .withJwtAuth(data.config.with_jwt_auth);
 
-    return `import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Query,
-  UseGuards,
-  HttpStatus,
-  HttpException,
-} from '@nestjs/common';
-${
-  data.config.with_swagger
-    ? `import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';`
-    : ""
-}
-${
-  data.config.with_jwt_auth
-    ? `import { JwtAuthGuard } from '../../guards/jwt-auth.guard';`
-    : ""
-}
-${
-  data.config.with_jwt_auth
-    ? `import { RolesGuard } from '../../guards/roles.guard';`
-    : ""
-}
-${
-  data.config.with_jwt_auth
-    ? `import { Roles } from '../../decorators/roles.decorator';`
-    : ""
-}
-import { ${entityName}Service } from './${table.name}.service';
-import { Create${entityName}Dto } from './dto/create-${table.name}.dto';
-import { Update${entityName}Dto } from './dto/update-${table.name}.dto';
-import { ${entityName} } from 'src/entities/${table.name}.entity';
-
-${data.config.with_swagger ? `@ApiTags('${table.name}')` : ""}
-${data.config.with_swagger ? "@ApiBearerAuth()" : ""}
-@Controller('${table.name}')
-${data.config.with_jwt_auth ? `@UseGuards(JwtAuthGuard, RolesGuard)` : ""}
-export class ${entityName}Controller {
-  constructor(private readonly ${table.name}Service: ${entityName}Service) {}
-
-  ${
-    data.config.with_swagger
-      ? `@ApiOperation({ summary: 'Create a new ${table.name}' })`
-      : ""
-  }
-  ${
-    data.config.with_swagger
-      ? `@ApiResponse({ status: 201, description: 'Created successfully', type: ${entityName} })`
-      : ""
-  }
-  @Post()
-  ${data.config.with_jwt_auth ? `@Roles('admin', 'user')` : ""}
-  async create(@Body() create${entityName}Dto: Create${entityName}Dto): Promise<${entityName}> {
-    try {
-      return await this.${table.name}Service.create(create${entityName}Dto);
-    } catch (error) {
-      throw new HttpException(
-        \`Failed to create ${table.name}: \${error.message}\`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
-
-  ${
-    data.config.with_swagger
-      ? `@ApiOperation({ summary: 'Get all ${table.name}s' })`
-      : ""
-  }
-  ${
-    data.config.with_swagger
-      ? `@ApiResponse({ status: 200, description: 'Retrieved successfully', type: [${entityName}] })`
-      : ""
-  }
-  @Get()
-  ${data.config.with_jwt_auth ? `@Roles('admin', 'user')` : ""}
-  async findAll(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
-  ): Promise<{ data: ${entityName}[]; total: number; page: number; totalPages: number }> {
-    try {
-      return await this.${table.name}Service.findAll(page, limit);
-    } catch (error) {
-      throw new HttpException(
-        \`Failed to retrieve ${table.name}s: \${error.message}\`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  ${
-    data.config.with_swagger
-      ? `@ApiOperation({ summary: 'Get ${table.name} by ID' })`
-      : ""
-  }
-  ${
-    data.config.with_swagger
-      ? `@ApiResponse({ status: 200, description: 'Retrieved successfully', type: ${entityName} })`
-      : ""
-  }
-  @Get(':id')
-  ${data.config.with_jwt_auth ? `@Roles('admin', 'user')` : ""}
-  async findOne(@Param('id') id: string): Promise<${entityName}> {
-    try {
-      const result = await this.${table.name}Service.findOne(+id);
-      if (!result) {
-        throw new HttpException(\`${entityName} with ID \${id} not found\`, HttpStatus.NOT_FOUND);
-      }
-      return result;
-    } catch (error) {
-      throw new HttpException(
-        \`Failed to retrieve ${table.name}: \${error.message}\`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
-
-  ${
-    data.config.with_swagger
-      ? `@ApiOperation({ summary: 'Update ${table.name}' })`
-      : ""
-  }
-  ${
-    data.config.with_swagger
-      ? `@ApiResponse({ status: 200, description: 'Updated successfully', type: ${entityName} })`
-      : ""
-  }
-  @Patch(':id')
-  ${data.config.with_jwt_auth ? `@Roles('admin')` : ""}
-  async update(
-    @Param('id') id: string,
-    @Body() update${entityName}Dto: Update${entityName}Dto,
-  ): Promise<${entityName}> {
-    try {
-      return await this.${
-        table.name
-      }Service.update(+id, update${entityName}Dto);
-    } catch (error) {
-      throw new HttpException(
-        \`Failed to update ${table.name}: \${error.message}\`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
-
-  ${
-    data.config.with_swagger
-      ? `@ApiOperation({ summary: 'Delete ${table.name}' })`
-      : ""
-  }
-  ${
-    data.config.with_swagger
-      ? `@ApiResponse({ status: 200, description: 'Deleted successfully' })`
-      : ""
-  }
-  @Delete(':id')
-  ${data.config.with_jwt_auth ? `@Roles('admin')` : ""}
-  async remove(@Param('id') id: string): Promise<{ message: string }> {
-    try {
-      await this.${table.name}Service.remove(+id);
-      return { message: \`${entityName} with ID \${id} deleted successfully\` };
-    } catch (error) {
-      throw new HttpException(
-        \`Failed to delete ${table.name}: \${error.message}\`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
-}`;
+    return builder.build();
   }
 
   generateService(table: TableSchema, data: TemplateData): string {

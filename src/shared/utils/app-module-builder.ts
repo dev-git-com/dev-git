@@ -10,9 +10,9 @@ export class AppModuleBuilder {
   private moduleImports: string[] = [];
 
   constructor() {
-    this.addImport('Module', '@nestjs/common');
-    this.addImport('ConfigModule', '@nestjs/config');
-    this.addImport('TypeOrmModule', '@nestjs/typeorm');
+    this.addImport("Module", "@nestjs/common");
+    this.addImport("ConfigModule", "@nestjs/config");
+    this.addImport("TypeOrmModule", "@nestjs/typeorm");
   }
 
   addImport(item: string, from: string): this {
@@ -30,7 +30,7 @@ export class AppModuleBuilder {
     return this;
   }
 
-  enableGlobalConfig(envFilePath: string = '.env'): this {
+  enableGlobalConfig(envFilePath: string = ".env"): this {
     this.features.isGlobal = true;
     this.features.envFilePath = envFilePath;
     return this;
@@ -38,19 +38,19 @@ export class AppModuleBuilder {
 
   enableDatabaseConfig(): this {
     this.features.databaseConfig = true;
-    this.addImport('databaseConfig', './configs/database.config');
+    this.addImport("databaseConfig", "./configs/database.config");
     return this;
   }
 
   enableAuthModule(): this {
     this.features.authModule = true;
-    this.addImport('AuthModule', './modules/auth/auth.module');
+    this.addImport("AuthModule", "./modules/auth/auth.module");
     return this;
   }
 
   private generateConfigModule(): string {
-    if (!this.features.isGlobal) return '';
-    
+    if (!this.features.isGlobal) return "";
+
     return `
     ConfigModule.forRoot({
       isGlobal: true,
@@ -59,8 +59,8 @@ export class AppModuleBuilder {
   }
 
   private generateDatabaseModule(): string {
-    if (!this.features.databaseConfig) return '';
-    
+    if (!this.features.databaseConfig) return "";
+
     return `
     TypeOrmModule.forRootAsync(databaseConfig)`;
   }
@@ -68,22 +68,22 @@ export class AppModuleBuilder {
   build(): string {
     const configModule = this.generateConfigModule();
     const databaseModule = this.generateDatabaseModule();
-    
-    // Construire la liste des imports du module
+
+    // Build the list of module imports
     const moduleImportsArray = [
       configModule,
       databaseModule,
-      this.features.authModule ? '    AuthModule,' : '',
-      ...this.moduleImports.map(module => `    ${module}`),
+      this.features.authModule ? "    AuthModule," : "",
+      ...this.moduleImports.map((module) => `    ${module}`),
     ].filter(Boolean);
 
-    return `${this.importStatements.join('\n')}
+    return `${this.importStatements.join("\n")}
 
 @Module({
-  imports: [${moduleImportsArray.join(',\n')}
+  imports: [${moduleImportsArray.join(",\n")}
   ],
 })
-export class AppModule {}`
+export class AppModule {}`;
   }
 
   reset(): this {

@@ -19,6 +19,7 @@ export class EntityBuilder {
       "Entity",
       "Column",
       "PrimaryGeneratedColumn",
+      "JoinColumn",
     ]);
     this.validationImports = new Set();
     this.swaggerImports = new Set();
@@ -150,6 +151,10 @@ export class EntityBuilder {
       }
     } else {
       const columnOptions: string[] = [];
+      // Handle object type first for PostgreSQL
+      if (column.type === "object") {
+        columnOptions.push(`type: 'jsonb'`);
+      }
       if (column.length) columnOptions.push(`length: ${column.length}`);
       if (!column.nullable) columnOptions.push("nullable: false");
       else columnOptions.push("nullable: true");

@@ -65,9 +65,9 @@ export class EntityColumnBuilder {
           this.databaseType.includes("postgre") ||
           this.databaseType === "pg"
         ) {
-          columnOptions.push(`type: 'jsonb'`);
+          columnOptions.unshift(`type: 'jsonb'`);
         } else {
-          columnOptions.push(`type: 'json'`);
+          columnOptions.unshift(`type: 'json'`);
         }
       }
 
@@ -102,9 +102,6 @@ export class EntityColumnBuilder {
         break;
       case "Date":
         this.decorators.push("@IsDate()");
-        break;
-      case "object":
-        this.decorators.push("@IsObject()");
         break;
     }
   }

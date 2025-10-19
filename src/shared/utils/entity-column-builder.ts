@@ -59,12 +59,16 @@ export class EntityColumnBuilder {
         );
       }
 
-      // Special handling for PostgreSQL
-      if (
-        this.column.type === "object" &&
-        (this.databaseType.includes("postgre") || this.databaseType === "pg")
-      ) {
-        columnOptions.push(`type: 'jsonb'`);
+      // Special handling for PostgreSQL JSON columns
+      if (this.column.type === "object") {
+        if (
+          this.databaseType.includes("postgre") ||
+          this.databaseType === "pg"
+        ) {
+          columnOptions.push(`type: 'jsonb'`);
+        } else {
+          columnOptions.push(`type: 'json'`);
+        }
       }
 
       const optionsStr =
@@ -99,6 +103,9 @@ export class EntityColumnBuilder {
       case "Date":
         this.decorators.push("@IsDate()");
         break;
+      case "object":
+        this.decorators.push("@IsObject()");
+        break;
     }
   }
 
@@ -119,8 +126,15 @@ export class EntityColumnBuilder {
     this.buildValidationDecorators();
     this.buildSwaggerDecorators();
 
-    const typeAnnotation =
-      this.column.type === "Date" ? "Date" : this.column.type;
+    // Handle TypeScript type annotation
+    let typeAnnotation: string;
+    if (this.column.type === "Date") {
+      typeAnnotation = "Date";
+    } else if (this.column.type === "object") {
+      typeAnnotation = "Record<string, any>";
+    } else {
+      typeAnnotation = this.column.type;
+    }
 
     return `  ${this.decorators.join("\n  ")}
   ${this.column.name}: ${typeAnnotation};`;

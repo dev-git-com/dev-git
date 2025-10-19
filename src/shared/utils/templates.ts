@@ -2,6 +2,7 @@ import { TemplateData, TableSchema, TableColumn } from "./types";
 import { DATABASE_CONFIGS } from "./constants";
 import { PackageJsonBuilder } from "./package-json-builder";
 import { MainTsBuilder } from "./main-ts-builder";
+import { AppModuleBuilder } from "./app-module-builder";
 
 export class TemplateGenerator {
   generatePackageJson(data: TemplateData): string {
@@ -163,38 +164,27 @@ export class TemplateGenerator {
   }
 
   generateAppModule(data: TemplateData): string {
-    return `import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-${
-  data.config.with_jwt_auth
-    ? `import { AuthModule } from './modules/auth/auth.module';`
-    : ""
-}
-${data.tables
-  .map(
-    (table) =>
-      `import { ${this.capitalize(table.name)}Module } from './modules/${
-        table.name
-      }/${table.name}.module';`
-  )
-  .join("\n")}
-import { databaseConfig } from './configs/database.config';
+    const builder = new AppModuleBuilder();
 
-@Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-    TypeOrmModule.forRootAsync(databaseConfig),
-    ${data.config.with_jwt_auth ? "AuthModule," : ""}
-    ${data.tables
-      .map((table) => `${this.capitalize(table.name)}Module`)
-      .join(",\n    ")}
-  ],
-})
-export class AppModule {}`;
+    // Configuration de base
+    builder
+      .enableGlobalConfig('.env')
+      .enableDatabaseConfig();
+
+    // Ajout du module d'authentification si nécessaire
+    if (data.config.with_jwt_auth) {
+      builder.enableAuthModule();
+    }
+
+    // Ajout des modules pour chaque table
+    data.tables.forEach(table => {
+      builder.addFeatureModuleImport(
+        this.capitalize(table.name),
+        `./modules/${table.name}/${table.name}.module`
+      );
+    });
+
+    return builder.build();
   }
 
   generateEntity(table: TableSchema, data: TemplateData): string {

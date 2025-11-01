@@ -7,6 +7,8 @@ import { EntityBuilder } from "./entity-builder";
 import { EntityColumnBuilder } from "./entity-column-builder";
 import { RelationshipPropertyBuilder } from "./relationship-property-builder";
 import { ControllerBuilder } from "./controller-builder";
+import { ServiceBuilder } from "./service-builder";
+import { DtoBuilder } from "./dto-builder";
 
 export class TemplateGenerator {
   generatePackageJson(data: TemplateData): string {
@@ -254,168 +256,34 @@ export class TemplateGenerator {
   }
 
   generateService(table: TableSchema, data: TemplateData): string {
-    const entityName = this.capitalize(table.name);
+    const builder = new ServiceBuilder()
+      .setBasicInfo(table.name, this.capitalize(table.name))
+      .setForeignKeys(table.foreignKeys)
+      .enableDateFields(data.config.date_fields);
 
-    return `import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ${entityName} } from 'src/entities/${table.name}.entity';
-import { Create${entityName}Dto } from './dto/create-${table.name}.dto';
-import { Update${entityName}Dto } from './dto/update-${table.name}.dto';
-
-@Injectable()
-export class ${entityName}Service {
-  constructor(
-    @InjectRepository(${entityName})
-    private readonly ${table.name}Repository: Repository<${entityName}>,
-  ) {}
-
-  async create(create${entityName}Dto: Create${entityName}Dto): Promise<${entityName}> {
-    const ${table.name} = this.${
-      table.name
-    }Repository.create(create${entityName}Dto);
-    return await this.${table.name}Repository.save(${table.name});
-  }
-
-  async findAll(
-    page: number = 1,
-    limit: number = 10,
-  ): Promise<{ data: ${entityName}[]; total: number; page: number; totalPages: number }> {
-    const [data, total] = await this.${table.name}Repository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-      ${data.config.date_fields ? "order: { createdAt: 'DESC' }," : ""}
-    });
-
-    return {
-      data,
-      total,
-      page,
-      totalPages: Math.ceil(total / limit),
-    };
-  }
-
-  async findOne(id): Promise<${entityName}> {
-    const ${table.name} = await this.${table.name}Repository.findOne({
-      where: { id },
-      relations: [${table.foreignKeys
-        .map((fk) => `'${fk.referencesTable}'`)
-        .join(", ")}],
-    });
-
-    if (!${table.name}) {
-      throw new NotFoundException(\`${entityName} with ID \${id} not found\`);
-    }
-
-    return ${table.name};
-  }
-
-  async update(id, update${entityName}Dto: Update${entityName}Dto): Promise<${entityName}> {
-    const ${table.name} = await this.findOne(id);
-    Object.assign(${table.name}, update${entityName}Dto);
-    return await this.${table.name}Repository.save(${table.name});
-  }
-
-  async remove(id): Promise<void> {
-    const ${table.name} = await this.findOne(id);
-    await this.${table.name}Repository.remove(${table.name});
-  }
-
-  async findBy(criteria: Partial<${entityName}>): Promise<${entityName}[]> {
-    return await this.${table.name}Repository.find({
-      where: criteria,
-      relations: [${table.foreignKeys
-        .map((fk) => `'${fk.referencesTable}'`)
-        .join(", ")}],
-    });
-  }
-}`;
+    return builder.build();
   }
 
   generateCreateDto(table: TableSchema, data: TemplateData): string {
-    const entityName = this.capitalize(table.name);
     const editableColumns = table.columns.filter(
       (col) => !col.primary && !col.autoIncrement
     );
 
-    return `${
-      data.config.full_validations
-        ? "import { IsEmail, IsNotEmpty, IsOptional, IsString, IsNumber, IsBoolean, IsDate } from 'class-validator';"
-        : ""
-    }
-${
-  data.config.with_swagger
-    ? "import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';"
-    : ""
-}
+    const builder = new DtoBuilder()
+      .setBasicInfo(table.name, this.capitalize(table.name))
+      .setColumns(editableColumns)
+      .enableValidations(data.config.full_validations)
+      .enableSwagger(data.config.with_swagger);
 
-export class Create${entityName}Dto {
-${editableColumns
-  .map((col) => this.generateDtoProperty(col, data, false))
-  .join("\n\n")}
-}`;
+    return builder.buildCreateDto();
   }
 
   generateUpdateDto(table: TableSchema, data: TemplateData): string {
-    const entityName = this.capitalize(table.name);
+    const builder = new DtoBuilder()
+      .setBasicInfo(table.name, this.capitalize(table.name))
+      .enableSwagger(data.config.with_swagger);
 
-    return `import { PartialType } from '${
-      data.config.with_swagger ? "@nestjs/swagger" : "@nestjs/mapped-types"
-    }';
-import { Create${entityName}Dto } from './create-${table.name}.dto';
-
-export class Update${entityName}Dto extends PartialType(Create${entityName}Dto) {}`;
-  }
-
-  generateDtoProperty(
-    column: TableColumn,
-    data: TemplateData,
-    isUpdate: boolean
-  ): string {
-    const decorators = [];
-
-    // Validation decorators
-    if (data.config.full_validations) {
-      if (!column.nullable && !isUpdate) {
-        decorators.push("@IsNotEmpty()");
-      } else {
-        decorators.push("@IsOptional()");
-      }
-
-      if (column.name.toLowerCase().includes("email")) {
-        decorators.push("@IsEmail()");
-      }
-
-      switch (column.type) {
-        case "string":
-          decorators.push("@IsString()");
-          break;
-        case "number":
-          decorators.push("@IsNumber()");
-          break;
-        case "boolean":
-          decorators.push("@IsBoolean()");
-          break;
-        case "Date":
-          decorators.push("@IsDate()");
-          break;
-      }
-    }
-
-    // Swagger decorators
-    if (data.config.with_swagger) {
-      const swaggerDecorator =
-        column.nullable || isUpdate
-          ? "@ApiPropertyOptional()"
-          : "@ApiProperty()";
-      decorators.push(swaggerDecorator);
-    }
-
-    const typeAnnotation = column.type === "Date" ? "Date" : column.type;
-    const optional = column.nullable || isUpdate ? "?" : "";
-
-    return `  ${decorators.join("\n  ")}
-  ${column.name}${optional}: ${typeAnnotation};`;
+    return builder.buildUpdateDto();
   }
 
   generateModule(table: TableSchema, data: TemplateData): string {

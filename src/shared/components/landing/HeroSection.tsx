@@ -6,7 +6,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "../../css/landing/HeroSection.module.css";
 import { FaPlay, FaTimes } from "react-icons/fa";
-import AnimatedGrid from "./AnimatedGrid";
 import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);

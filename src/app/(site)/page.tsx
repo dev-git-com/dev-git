@@ -5,7 +5,6 @@ import TimelineCards from "@/shared/components/landing/Timeline";
 import DeveloperTestimonials from "@/shared/components/landing/DeveloperTestimonials";
 import DataTable from "@/shared/components/landing/Table";
 import { Source_Code_Pro } from "next/font/google";
-import AnimatedGrid from "@/shared/components/landing/AnimatedGrid";
 import Footer from "@/shared/components/landing/Footer";
 
 const sourceCodePro = Source_Code_Pro({
@@ -27,13 +26,11 @@ const Home = () => {
     <div
       className={`landing-main ${sourceCodePro.variable} bg-black text-white relative min-h-screen overflow-x-hidden`}
     >
-      <AnimatedGrid>
         <HeroSection />
         <Cards />
         <DataTable />
         <TimelineCards />
         <DeveloperTestimonials />
-      </AnimatedGrid>
       <Footer />
     </div>
   );

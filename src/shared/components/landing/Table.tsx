@@ -1,7 +1,6 @@
 "use client";
 import { Zap, Search } from "lucide-react";
-import AnimatedGrid from "./AnimatedGrid";
-import styles from "../../css/landing/data-table.module.css";
+import styles from "@/shared/css/landing/data-table.module.css";
 import clsx from "clsx";
 
 export default function DataTable() {
@@ -59,7 +58,7 @@ export default function DataTable() {
   ];
 
   return (
-    <AnimatedGrid className={styles.tableSection}>
+    <div className={styles.tableSection}>
       <div className={`${styles.tableContainer} sectionContainer`}>
         <div className={styles.tableHeader}>
           <h2 className={clsx(styles.title, "title")}>
@@ -183,6 +182,6 @@ export default function DataTable() {
           </div>
         </div>
       </div>
-    </AnimatedGrid>
+    </div>
   );
 }

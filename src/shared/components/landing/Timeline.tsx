@@ -1,12 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Mousewheel } from "swiper/modules";
-import styles from "../../css/landing/timeline-cards.module.css";
+import styles from "@/shared/css/landing/timeline-cards.module.css";
 import "swiper/css";
 import "swiper/css/free-mode";
 import clsx from "clsx";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Type definitions
 interface CardItem {
@@ -129,23 +133,109 @@ const swiperConfig = {
 };
 
 export default function TimelineCards() {
-  return (
-    <div className={`${styles.timelineContainer} sectionContainer`}>
-      {/* Header Section with Team Info and Progress */}
-      <HeaderSection />
+  const timelineSectionRef = useRef<HTMLDivElement>(null);
+  const timelineWrapperRef = useRef<HTMLDivElement>(null);
 
-      {/* Timeline Cards Section with Swiper */}
-      <TimelineSection />
-    </div>
+  useEffect(() => {
+    if (!timelineSectionRef.current || !timelineWrapperRef.current) return;
+
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (!timelineSectionRef.current || !timelineWrapperRef.current) {
+            ticking = false;
+            return;
+          }
+
+          const rect = timelineSectionRef.current.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          
+          // Calculate parallax effect (reduced from 400 to 200 for lighter animation)
+          const scrollProgress = Math.max(0, Math.min(1, (windowHeight - rect.top) / (windowHeight + rect.height)));
+          const translateY = -scrollProgress * 0;
+          
+          timelineSectionRef.current.style.transform = `translate3d(0, ${translateY}px, 0)`;
+          
+          if (rect.top <= 0 && rect.bottom > windowHeight) {
+            timelineWrapperRef.current.classList.add(styles.stuck);
+          } else {
+            timelineWrapperRef.current.classList.remove(styles.stuck);
+          }
+
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <section ref={timelineSectionRef} className={styles.timelineSection}>
+      <div ref={timelineWrapperRef} className={styles.timelineWrapper}>
+        <div className={`${styles.timelineContainer} sectionContainer`}>
+          <HeaderSection />
+          <TimelineSection />
+        </div>
+      </div>
+    </section>
   );
 }
 
 // Header component containing team info and progress bar
 function HeaderSection() {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const title = titleRef.current;
+    if (!title) return;
+
+    const chars = title.querySelectorAll(`.${styles.char}`);
+    const totalChars = chars.length;
+    
+    chars.forEach((char, index) => {
+      gsap.to(char, {
+        backgroundSize: '100% 100%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: title,
+          start: 'top 90%',
+          end: 'top 60%',
+          scrub: true,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            const charProgress = (progress * totalChars) - index;
+            const clampedProgress = Math.max(0, Math.min(1, charProgress));
+            gsap.set(char, { backgroundSize: `${clampedProgress * 100}% 100%` });
+          }
+        }
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
+
+  const renderChars = (text: string) => {
+    return text.split('').map((char, index) => (
+      <span key={index} className={styles.char}>
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    ));
+  };
+
   return (
     <div className={styles.headerSection}>
       <div className={styles.headerContent}>
-        <h1 className={clsx(styles.mainTitle, "title")}>{teamData.title}</h1>
+        <h1 ref={titleRef} className={clsx(styles.mainTitle, "title")}>
+          {renderChars(teamData.title)}
+        </h1>
         <p className={styles.subtitle}>{teamData.subtitle}</p>
 
         {/* Team avatars with stacking effect */}

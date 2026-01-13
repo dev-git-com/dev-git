@@ -29,6 +29,8 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --color-section: black;
+    --color-light: #0e1117;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -65,4 +67,15 @@ body {
 
 .slide-br {
   animation: slide-br 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@font-face {
+  font-family: 'Le Murmure';
+  src: url('/fonts/webfonts/LeMurmure-Regular.woff2') format('woff2'),
+       url('/fonts/webfonts/LeMurmure-Regular.woff') format('woff'),
+       url('/fonts/le-murmure.ttf') format('truetype'),
+       url('/fonts/le-murmure.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }

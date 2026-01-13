@@ -28,6 +28,18 @@ const withNextra = nextra({
 
 export default withNextra({
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
   turbopack: {
     resolveAlias: {
       "next-mdx-import-source-file": "./mdx-components.js",

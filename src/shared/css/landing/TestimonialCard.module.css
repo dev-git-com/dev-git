@@ -8,7 +8,7 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   border: 1px solid #3a3a3a;
   position: relative;
-  z-index: 999999999;
+  z-index: 99;
 }
 
 @media (max-width: 767px) {

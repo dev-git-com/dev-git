@@ -138,7 +138,7 @@ const CardsSection: React.FC = () => {
                 
                 if (card2Progress > 0.5 && currentState !== true) {
                   cardTitle.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease-out';
-                  cardTitle.style.transform = 'rotate(-90deg) translate(-250px, -30px)';
+                  cardTitle.style.transform = 'rotate(-90deg) translate(-260px, -45px)';
                   cardTitle.style.opacity = '0.3';
                   titleStates.set(cardTitle, true);
                 } else if (card2Progress <= 0.45 && currentState !== false) {
@@ -156,7 +156,7 @@ const CardsSection: React.FC = () => {
                 
                 if (earlyTrigger > 0.5 && currentState !== true) {
                   cardTitle.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease-out';
-                  cardTitle.style.transform = 'rotate(-90deg) translate(-250px, -28px)';
+                  cardTitle.style.transform = 'rotate(-90deg) translate(-260px, -48px)';
                   cardTitle.style.opacity = '0.3';
                   titleStates.set(cardTitle, true);
                 } else if (earlyTrigger <= 0.45 && currentState !== false) {

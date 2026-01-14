@@ -31,53 +31,116 @@ export default function TeamMemberList() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mousePos = useRef({ x: 0, y: 0 });
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const isInsideSection = useRef(true);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
+      
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const wasInside = isInsideSection.current;
+        isInsideSection.current = !(e.clientY < rect.top || e.clientY > rect.bottom || 
+                                    e.clientX < rect.left || e.clientX > rect.right);
+        
+        if (wasInside !== isInsideSection.current) {
+          imageRefs.current.forEach((img) => {
+            if (img) {
+              img.style.zIndex = isInsideSection.current ? '10' : '-99999';
+              if (!isInsideSection.current) {
+                gsap.to(img, { opacity: 0, duration: 0.2 });
+              }
+            }
+          });
+          if (!isInsideSection.current) {
+            setHoveredIndex(null);
+          }
+        }
+      }
     };
+
+    const handleScroll = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const mouseInside = mousePos.current.y >= rect.top && mousePos.current.y <= rect.bottom &&
+                           mousePos.current.x >= rect.left && mousePos.current.x <= rect.right;
+        
+        if (!mouseInside) {
+          imageRefs.current.forEach((img) => {
+            if (img) {
+              gsap.killTweensOf(img);
+              gsap.to(img, { opacity: 0, duration: 0.15, onComplete: () => {
+                img.style.zIndex = '-99999';
+              }});
+            }
+          });
+          setHoveredIndex(null);
+          isInsideSection.current = false;
+        }
+      }
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleHover = (index: number, isHovered: boolean, isMobile = false, clickX?: number, clickY?: number) => {
+    if (!isInsideSection.current && isHovered) return;
+    
     setHoveredIndex(isHovered ? index : null);
     
-    // إخفاء جميع الصور أولاً
-    imageRefs.current.forEach((img, i) => {
-      if (img && i !== index) {
-        gsap.to(img, {
-          opacity: 0,
-          scale: 0.8,
-          duration: 0.3,
-          ease: 'power2.in',
-        });
-      }
-    });
-
     const img = imageRefs.current[index];
     if (!img) return;
 
     if (isHovered) {
+      imageRefs.current.forEach((otherImg, i) => {
+        if (otherImg && i !== index) {
+          gsap.killTweensOf(otherImg);
+          gsap.to(otherImg, {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.2,
+            ease: 'power2.in',
+            onComplete: () => {
+              otherImg.style.zIndex = '-99999';
+            }
+          });
+        }
+      });
+
+      gsap.killTweensOf(img);
+      img.style.zIndex = '10';
       if (isMobile && clickX !== undefined && clickY !== undefined) {
         gsap.set(img, { left: clickX, top: clickY });
       } else if (!isMobile) {
         gsap.set(img, { left: mousePos.current.x, top: mousePos.current.y });
       }
-      gsap.to(img, {
-        opacity: 1,
-        scale: 1,
-        clipPath: 'inset(0% 0% 0% 0%)',
-        duration: 0.6,
-        ease: 'power2.out',
-      });
+      gsap.fromTo(img, 
+        { opacity: 0, scale: 0.8, clipPath: 'inset(0% 100% 0% 0%)' },
+        {
+          opacity: 1,
+          scale: 1,
+          clipPath: 'inset(0% 0% 0% 0%)',
+          duration: 0.5,
+          ease: 'power2.out',
+        }
+      );
     } else {
+      gsap.killTweensOf(img);
       gsap.to(img, {
         opacity: 0,
         scale: 0.8,
         clipPath: 'inset(0% 100% 0% 0%)',
-        duration: 0.4,
+        duration: 0.3,
         ease: 'power2.in',
+        onComplete: () => {
+          img.style.zIndex = '-99999';
+        }
       });
     }
   };
@@ -110,7 +173,7 @@ export default function TeamMemberList() {
   };
 
   return (
-    <section className={styles.teamSection}>
+    <section ref={sectionRef} className={styles.teamSection}>
       {teamMembers.map((member, index) => (
         <div 
           key={index} 

@@ -41,7 +41,7 @@ export const DrawerWrapper = ({ children }: { children: React.ReactNode }) => {
     >
       {isMobile && !isDrawerOpen ? (
         // Mobile app bar
-        <div className="fixed top-0 left-2 z-50">
+        <div className="fixed top-0 left-2 z-[9999]">
           <div
             className="justify-center items-center justify-items-center py-2 cursor-pointer inline-flex w-full gap-3 font-bold"
             onClick={() => {

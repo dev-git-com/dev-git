@@ -58,11 +58,10 @@
 }
 
 .mainTitle {
-  font-size: 3.9rem;
+  font-size: 3rem;
   font-weight: 700;
   margin-bottom: 8px;
   line-height: 1.2;
-  font-family: Le Murmure, sans-serif;
 }
 
 .mainTitle .char {
@@ -300,11 +299,10 @@
 
   .headerContent {
     width: 100%;
-    padding: 30px;
   }
   
   .timelineContainer {
-    padding: 40px 6px;
+    padding:60px 6px 40px 6px;
     border-radius: 16px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;

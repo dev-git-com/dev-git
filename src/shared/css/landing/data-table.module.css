@@ -1,13 +1,22 @@
 .tableSection {
+  background-color: var(--color-section);
   min-height: 100vh;
-  padding: 2rem 0;
+  padding: 2rem 0  0 0;
+
 }
 
-.tableContainer {
+.tableContainer {  
+  background-color: var(--color-light);
   margin: 0 auto;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   border-radius: 12px;
   direction: ltr;
+  max-width: 1400px;
+  margin: auto;
+  padding: 60px 20px;
+  z-index: 9999;
+  position: relative;
+
 }
 
 .tableHeader {

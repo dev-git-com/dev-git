@@ -1,151 +1,169 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import styles from "../../css/landing/DeveloperTestimonials.module.css";
-import clsx from "clsx";
+import React, { useEffect, useRef } from 'react';
+import styles from '@/shared/css/landing/Developertestimonials.module.css';
+import { Testimonial } from '@/types/Testimonial';
+import TestimonialCard from './Testimonialcard';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-interface Developer {
-  id: number;
-  name: string;
-  title: string;
-  company: string;
-  avatar: string;
-  testimonial: string;
+gsap.registerPlugin(ScrollTrigger);
+
+interface DeveloperTestimonialsProps {
+  testimonials?: Testimonial[];
 }
 
-const testimonialsData: Developer[] = [
+const defaultTestimonials: Testimonial[] = [
   {
-    id: 1,
-    name: "Steve Poole",
-    title: "DevRel, Semantic",
-    company: "Semantic",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80",
-    testimonial:
-      "Most CodeGen tools failed us a bit on Java classpath docs, wrong syntax, and broken imports. But their dev experience has outperformed them all, generating accurate unit tests even for complex code.",
+    id: '1',
+    name: 'Sarah Chen',
+    username: '@sarahdev',
+    avatar: 'https://i.pravatar.cc/150?img=47',
+    content: 'dev-git saved me weeks of work! Just uploaded my SQL file and got a complete NestJS backend with TypeORM. This is a game changer for rapid prototyping.',
   },
   {
-    id: 2,
-    name: "Bogdan Dolman",
-    title: "Director of TV-Co Media Network",
-    company: "TV-Co Media Network",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80",
-    testimonial:
-      "We're delighted to roll out Zencoder's Autonomous Zen feature. Automating key fixes and dependency updates through our CI/CD pipeline means our developers can focus on feature creation, not maintenance.",
+    id: '2',
+    name: 'Marcus Rodriguez',
+    username: '@marcusbuilds',
+    avatar: 'https://i.pravatar.cc/150?img=33',
+    content: 'Used to spend 3-4 days setting up boilerplate for new projects. With dev-git, I had a production-ready backend in minutes. Absolutely incredible!',
   },
   {
-    id: 3,
-    name: "Kai Katschthaler",
-    title: "Senior Solution Architect",
-    company: "Enterprise Corp",
-    avatar:
-      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80",
-    testimonial:
-      "Zencoder made building internal APIs effortless. Just describe the API, and it finds the right patterns for writing the script for you. Huge time saver.",
+    id: '3',
+    name: 'Emily Watson',
+    username: '@emilycodes',
+    avatar: 'https://i.pravatar.cc/150?img=15',
+    content: 'As a solo developer, dev-git is my secret weapon. Upload SQL schema, get full CRUD operations, entities, DTOs, everything. More time for features, less time on setup.',
   },
   {
-    id: 4,
-    name: "Alexey Bychuk",
-    title: "Product Community",
-    company: "Product Community",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80",
-    testimonial:
-      "Especially impressed with Zencoder. I spent 2 hours scratching my head against the wall, trying to straight some issues with Cursor. And Zencoder aid it in 10 mins just now!",
+    id: '4',
+    name: 'David Kim',
+    username: '@davidkimdev',
+    avatar: 'https://i.pravatar.cc/150?img=52',
+    content: 'Our startup needed to move fast. dev-git generated our entire backend from database schema. We launched 2 weeks ahead of schedule!',
   },
   {
-    id: 5,
-    name: "Zheng Yuan",
-    title: "Staff Machine Learning Engineer, PayPal",
-    company: "PayPal",
-    avatar:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80",
-    testimonial:
-      "The AI assistant capabilities are impressive. It helps with complex debugging and suggests optimal solutions quickly.",
+    id: '5',
+    name: 'Alex Thompson',
+    username: '@alexthompson',
+    avatar: 'https://i.pravatar.cc/150?img=12',
+    content: 'The TypeORM integration is flawless. Clean code, proper structure, follows NestJS best practices. It\'s like having a senior developer on the team.',
+  },
+  {
+    id: '6',
+    name: 'Priya Patel',
+    username: '@priyatech',
+    avatar: 'https://i.pravatar.cc/150?img=60',
+    content: 'Reduced our backend development time by 80%. Just pass the SQL file and dev-git handles all the heavy lifting. This tool is pure magic!',
+  },
+  {
+    id: '7',
+    name: 'James Wilson',
+    username: '@jwilsondev',
+    avatar: 'https://i.pravatar.cc/150?img=13',
+    content: 'Finally, a tool that understands what developers actually need. No more repetitive boilerplate. dev-git lets me focus on business logic.',
+  },
+  {
+    id: '8',
+    name: 'Lisa Anderson',
+    username: '@lisabuilds',
+    avatar: 'https://i.pravatar.cc/150?img=68',
+    content: 'Onboarded 3 junior devs last month. dev-git generated consistent, clean backends for all their projects. Perfect for maintaining code standards!',
+  },
+  {
+    id: '9',
+    name: 'Ryan Foster',
+    username: '@ryanfoster',
+    avatar: 'https://i.pravatar.cc/150?img=59',
+    content: 'From SQL to fully functional NestJS API in minutes. Controllers, services, repositories, all generated perfectly. This is the future of backend development.',
+  },
+  {
+    id: '10',
+    name: 'Nina Kowalski',
+    username: '@ninakowalski',
+    avatar: 'https://i.pravatar.cc/150?img=8',
+    content: 'Been using dev-git for 6 months now. Every new project starts with it. The time savings are unreal. Highly recommend to any NestJS developer!',
   },
 ];
 
-export default function DeveloperTestimonials() {
-  const [testimonials] = useState<Developer[]>(testimonialsData);
+const DeveloperTestimonials: React.FC<DeveloperTestimonialsProps> = ({
+  testimonials = defaultTestimonials,
+}) => {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const title = titleRef.current;
+    if (!section || !title) return;
+
+    const container = section.querySelector(`.${styles.container}`);
+    
+    gsap.set(container, { opacity: 0, y: 100 });
+
+    gsap.to(container, {
+      opacity: 1,
+      y: 0,
+      duration: 1.5,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 70%',
+        toggleActions: 'play none none none',
+        markers: false
+      }
+    });
+
+    const chars = title.querySelectorAll(`.${styles.char}`);
+    const totalChars = chars.length;
+    
+    chars.forEach((char, index) => {
+      gsap.to(char, {
+        backgroundSize: '100% 100%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: title,
+          start: 'top 90%',
+          end: 'top 60%',
+          scrub: true,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            const charProgress = (progress * totalChars) - index;
+            const clampedProgress = Math.max(0, Math.min(1, charProgress));
+            gsap.set(char, { backgroundSize: `${clampedProgress * 100}% 100%` });
+          }
+        }
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
+
+  const renderChars = (text: string) => {
+    return text.split('').map((char, index) => (
+      <span key={index} className={styles.char}>
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    ));
+  };
 
   return (
-    <section className={styles.testimonialsSection}>
-      <div className={`${styles.container} sectionContainer`}>
-        <div className={styles.header}>
-          <p className={styles.thankYou}>THANK YOU</p>
-          <h2 className={clsx(styles.title, "title")}>
-            Loved By Professional
-            <br />
-            Developers
-          </h2>
-        </div>
-
-        <div className={styles.testimonialsGrid}>
-          <div className={styles.firstRow}>
-            {testimonials.slice(0, 3).map((testimonial) => (
-              <div key={testimonial.id} className={styles.testimonialCard}>
-                <p className={styles.testimonialText}>
-                  &ldquo;{testimonial.testimonial}&rdquo;
-                </p>
-
-                <div className={styles.authorInfo}>
-                  <Image
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    width={48}
-                    height={48}
-                    className={styles.avatar}
-                    unoptimized
-                    style={{
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <div className={styles.authorDetails}>
-                    <h4 className={styles.authorName}>{testimonial.name}</h4>
-                    <p className={clsx(styles.authorTitle, "title")}>
-                      {testimonial.title}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.secondRow}>
-            {testimonials.slice(3, 5).map((testimonial) => (
-              <div key={testimonial.id} className={styles.testimonialCard}>
-                <p className={styles.testimonialText}>
-                  &ldquo;{testimonial.testimonial}&rdquo;
-                </p>
-
-                <div className={styles.authorInfo}>
-                  <Image
-                    src={testimonial.avatar}
-                    alt={testimonial.name}
-                    width={48}
-                    height={48}
-                    className={styles.avatar}
-                    unoptimized
-                    style={{
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <div className={styles.authorDetails}>
-                    <h4 className={styles.authorName}>{testimonial.name}</h4>
-                    <p className={clsx(styles.authorTitle, "title")}>
-                      {testimonial.title}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+    <section ref={sectionRef} className={styles.section}>
+      <div className={styles.container}>
+        <h1 ref={titleRef} className={styles.title}>
+          {renderChars('DEVELOPERS LOVE DEV-GIT')}<span> !</span>
+        </h1>
+        
+        <div className={styles.grid}>
+          {testimonials.map((testimonial) => (
+            <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+          ))}
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default DeveloperTestimonials;

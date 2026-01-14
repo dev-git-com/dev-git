@@ -17,11 +17,7 @@ export const DrawerWrapper = ({ children }: { children: React.ReactNode }) => {
       setIsTablet(tablet);
       setIsMobile(mobile);
 
-      if (!tablet) {
-        const storedValue = localStorage.getItem(EnumLocalStorage.isDrawerOpen);
-        const shouldBeOpen = storedValue === "true";
-        setIsDrawerOpen(window.innerWidth >= 1000 || shouldBeOpen);
-      } else {
+      if (tablet) {
         setIsDrawerOpen(false);
       }
     };
@@ -40,12 +36,12 @@ export const DrawerWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <main
       className={`${
-        isDrawerOpen && !isTablet ? "ml-[256px]" : isMobile ? "ml-0" : "ml-20"
-      } duration-300`}
+        isDrawerOpen && !isTablet ? "pl-[256px]" : isMobile ? "pl-0" : "pl-20"
+      } transition-[padding] duration-300`}
     >
       {isMobile && !isDrawerOpen ? (
         // Mobile app bar
-        <div className="fixed top-0 left-2 z-50">
+        <div className="fixed top-0 left-2 z-[9999]">
           <div
             className="justify-center items-center justify-items-center py-2 cursor-pointer inline-flex w-full gap-3 font-bold"
             onClick={() => {

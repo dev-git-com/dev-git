@@ -58,11 +58,27 @@
   }
 }
 
-body {
-  @apply bg-black text-white font-sans;
+html.lenis, html.lenis body {
+  height: auto;
 }
 
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
 
 .slide-br {
   animation: slide-br 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
+

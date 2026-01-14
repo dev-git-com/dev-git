@@ -1,0 +1,220 @@
+.cardsSection {
+  position: relative;
+  height: 400vh;
+  padding-top: 0 !important;
+  z-index: 1;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cardsSection.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.cardsWrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  will-change: transform;
+  perspective: 1000px;
+}
+
+.snapContainer {
+  height: 100%;
+  position: relative;
+}
+
+.snapPoint {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.cardsContainer {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  position: relative;
+  z-index: 99999;
+}
+
+.card {
+  position: fixed;
+  top: 50%;
+  left: 45%;
+  transform: translate(-50%, -50%) translateX(100vw);
+  width: 930px;
+  height: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  pointer-events: none;
+  will-change: transform, filter;
+  transform: translate3d(-50%, -50%, 0) translateX(100vw);
+  transform-style: preserve-3d;
+}
+
+.card.active {
+  pointer-events: auto;
+}
+
+.card1 {
+  animation-range: entry 0% cover 30%;
+  background: linear-gradient(135deg, #1e3b8a69, rgba(147, 51, 234, 0.15));
+  transform: translate(-50%, -50%);
+}
+
+.card2 {
+  animation-range: entry 35% cover 65%;
+  background: linear-gradient(135deg, #f19d2f65,  rgba(147, 51, 234, 0.15));
+}
+
+.card3 {
+  animation-range: entry 70% cover 100%;
+  background: linear-gradient(135deg, #17628267, rgba(59, 130, 246, 0.15));
+}
+
+@media (min-width: 1151px) {
+  .card1 { z-index: 1; }
+  .card2 { z-index: 2; transform: translateX(100vw); }
+  .card3 { z-index: 3; transform: translateX(100vw); }
+}
+
+@media (max-width: 1150px) {
+  .card1 { z-index: 1; }
+  .card2 { z-index: 2; transform: translateY(100vh); }
+  .card3 { z-index: 3; transform: translateY(100vh); }
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: var(--color-light);
+  border-radius: 15px;
+  z-index: 0;
+}
+
+.cardContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 40px;
+  gap: 40px;
+}
+
+.cardText {
+  flex: 1;
+  padding: 60px 80px;
+}
+
+.cardImage {
+  flex-shrink: 0;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+
+.cardTitle {
+  font-size: 48px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+  transform-origin: left bottom;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.cardTitle .char {
+  position: relative;
+  display: inline;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.1);
+  -webkit-background-clip: text;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(#fff, #fff);
+  background-size: 0% 100%;
+}
+
+.cardDescription {
+  font-size: 16px;
+  color: #d1d5dbcc;
+  line-height: 1.7;
+}
+
+.card:hover .cardDescription {
+  color: #e5e7eb;
+}
+
+@media (max-width: 1150px) {
+  .snapContainer {
+    height: auto;
+  }
+
+  .card {
+    width: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(100vh) scale(0.9);
+  }
+
+
+.cardText {
+  flex: 1;
+  padding: 30px;
+}
+
+}
+
+@media (max-width: 768px) {
+
+.cardsWrapper {
+  position: sticky;
+  top: 0;
+  height: 80vh;
+  overflow: visible;
+}
+  .card {
+    width: 90%;
+    height: auto;
+  }
+
+  .cardContent {
+    flex-direction: column;
+    padding: 30px;
+    gap: 20px;
+  }
+
+  .cardText {
+    padding: 20px 0px;
+  }
+
+  .cardImage {
+    display: none;
+  }
+
+  .cardIcon {
+    font-size: 200px;
+  }
+
+  .cardTitle {
+    font-size: 30px;
+  }
+
+  .cardDescription {
+    font-size: 14px;
+  }
+}

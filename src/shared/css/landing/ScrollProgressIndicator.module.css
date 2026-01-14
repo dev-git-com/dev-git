@@ -1,0 +1,36 @@
+.container {
+  position: fixed;
+  right: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+}
+
+.track {
+  width: 3px;
+  height: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  width: 100%;
+  background: linear-gradient(180deg,transparent, white);
+  border-radius: 10px;
+}
+
+@media (max-width: 1150px) {
+  .container {
+    right: 20px;
+  }
+}
+@media (max-width: 768px) {
+  .container {
+    right: 10px;
+  }
+  
+  .track {
+    height: 150px;
+    width: 2px;
+  }
+}

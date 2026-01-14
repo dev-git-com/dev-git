@@ -37,7 +37,7 @@ export const MiniDrawer = ({
 
   return (
     <aside
-      className={`bg-slate-950 text-white fixed top-0 left-0 h-full transition-all duration-300 border-r-2 border-slate-700 z-50 ${
+      className={`bg-slate-950 text-white fixed top-0 left-0 h-full transition-all duration-300 border-r-2 border-slate-700 z-[9999] ${
         isDrawerOpen ? "w-64" : "w-20"
       }`}
     >
